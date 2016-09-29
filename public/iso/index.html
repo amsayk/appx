@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang='<%= locale %>'>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'>
+  <title>Compta • Gestion des formulaires comptable</title>
+
+  <link rel='manifest' type='application/manifest+json' href='/assets/manifest.json'>
+
+  <link rel='icon' sizes='16x16 32x32' href='/assets/images/ic_account_balance_wallet_black_48dp.png'>
+
+  <base href='/'/>
+
+  <% if (! dev) { %>
+
+  <!--webfonts-->
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:600italic,400,300,600,700' rel='stylesheet' type='text/css'>
+  <!--//webfonts-->
+
+  <% } %>
+
+  <!--<link href='//fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>-->
+  <link href='/assets/css/material-icons/material-icons.css' rel='stylesheet'>
+
+  <link rel='stylesheet' href='/assets/css/bootstrap/4.0.0-alpha.3/bootstrap.min.css'>
+  <link rel='stylesheet' href='/assets/css/common.css'>
+  <link rel='stylesheet' href='<%= assets['main']['css'] %>'>
+
+  <script>
+    window.__locale = '<%- locale %>';
+  </script>
+
+  <% if (! dev) { %>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    </script>
+
+  <% } %>
+
+</head>
+<body>
+
+  <main id='app'><%- html %></main>
+  <div id='confirmation'></div>
+  <div id='notification'></div>
+
+  <script type='text/javascript'>
+    // Force `fetch` polyfill to workaround Chrome not displaying request body
+    // in developer tools for the native `fetch`.
+    self.fetch = null;
+  </script>
+  <script type='text/javascript'>
+    window.__APOLLO_STATE__ = <%- apolloState %>;
+  </script>
+  <script type='text/javascript'>
+    window.__APP_STATE__ = <%- appState %>;
+  </script>
+  <% if (dev) { %>
+  <script src='http://localhost:<%= port %>/webpack-dev-server.js'></script>
+  <% } else { %>
+  <script src='<%= assets['vendors']['js'] %>'></script>
+  <% } %>
+  <script src='<%= assets['main']['js'] %>'></script>
+
+</body>
+</html>

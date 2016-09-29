@@ -1,0 +1,126 @@
+.Sidebar{
+  width: 320px;
+  height: 100vh;
+  background: #05283c;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.FilterBox input::-webkit-input-placeholder{
+  color: #788c97;
+}
+
+.Logo {
+  color: #9acd32;
+}
+
+.CompanyList .CompanyItem.Active{
+  font-weight: 900;
+}
+
+.CompanyList .CompanyItem.Active, .CompanyList .CompanyItem:hover, .CompanyList .CompanyItem:focus{
+  color: #fff;
+}
+
+.CompanyList .CompanyItem--free:hover, .CompanyList .CompanyItem--free:focus{
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.CompanyList .CompanyItem{
+  display: block;
+  -webkit-user-select: none;
+  color: #c0d0e4;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 28px;
+  padding: 2px 14px;
+}
+
+.Brand{
+  font-weight: 900;
+  font-size: 24px;
+  text-transform: uppercase;
+  font-family: DIN17SBOP,Helvetica Neue,Helvetica,Arial,sans-serif;
+  color: #fff;
+  opacity: .7;
+
+  cursor: pointer;
+}
+
+.AddBtn{
+  cursor: pointer;
+}
+
+.Header{
+  margin-top: 1.5em;
+}
+
+.Header > div{
+  flex: 1;
+  justify-content: space-between;
+  display: flex;
+  padding: 1em 2em;
+}
+
+.Header > div > a:hover{
+  text-decoration: none;
+}
+.Header > div > a{
+  align-self: flex-start;
+  display: flex;
+}
+
+.FilterBox{
+  padding: 1em 2em 0;
+}
+.FilterBox i{
+  color: rgb(120, 140, 151);
+  transform: rotate(90deg);
+}
+.FilterBox input{
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  background: transparent;
+  border: none;
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+  vertical-align: top;
+  margin-left: 10px;
+  width: calc(100% - 50px);
+}
+
+.CompanyList{
+  padding: 1em 2em 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.UserProfile{
+  padding: 1em 2em;
+  display: flex;
+  justify-content: space-around;
+}
+
+.UserProfile .DisplayName, .UserProfile .Email{
+  font-family: DIN17SBOP,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+.UserProfile .DisplayName{
+  color: #fff;
+  font-weight: bold;
+}
+.UserProfile .Email{
+}
+
+.UserProfileMenuToggle, .UserProfileMenuToggle:hover, .UserProfileMenuToggle:focus{
+  color: #fff;
+}
+
+.UserProfileMenuToggle:hover, .UserProfileMenuToggle:focus{
+  text-decoration: none;
+}
+
+.UserProfile .DisplayNameText{
+  // padding-right: 6px;
+}

@@ -1,0 +1,42 @@
+.TopBar{
+}
+
+.Wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+.Left{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.Right{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Title{
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.Title {
+}
+
+.Title, .Close{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Close{
+}
+
+.Close button{
+  font-size: 2em;
+  font-weight: 500;
+  line-height: initial;
+  opacity: 0.8;
+  text-shadow: 0 1px 0 #e9f1f1;
+}

@@ -1,0 +1,2 @@
+export const HELP_SKIPPED = 'HELP_SKIPPED';
+export const STEP_COMPLETED = 'STEP_COMPLETED';

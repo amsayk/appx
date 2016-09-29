@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "serverURL": "http://localhost:5000/parse",
+      "appId": "appx.appId",
+      "masterKey": "appx.masterKey",
+      "appName": "Gestion des formulaires comptables"
+    }
+  ]
+}

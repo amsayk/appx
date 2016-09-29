@@ -1,0 +1,189 @@
+.BottomBar{
+  display: flex;
+}
+
+.Cancel{
+  flex: 1;
+}
+
+.Actions{
+  display: flex;
+  // flex: 2;
+  justify-content: space-around;
+}
+.Actions button{
+  padding: 0.25em 1rem;
+}
+
+.Actions .Wrapper{
+  display: flex;
+  justify-content: center;
+}
+
+.PrintAction{}
+
+.MoreActions{
+
+}
+
+.PrintAction button, .PrintAction button:focus, .PrintAction button:hover,
+.MoreActions button, .MoreActions button:hover, .MoreActions button:focus{
+  color: #fff;
+  text-decoration: none;
+  outline: 0;
+}
+
+.PrintAction + .MoreActions{
+  margin-left: -15px;
+}
+
+.MoreActionsToggle:after, .MoreActionsToggle:before{
+  display: none;
+}
+
+.SaveToolbar{
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.SaveOnly{}
+
+.SaveAndClose{
+}
+
+.btn:hover, .btn:focus{
+  outline: 0;
+}
+
+.btn {
+  outline: 0;
+  background-clip: padding-box;
+  border-radius: 2px;
+  font-family: "HelveticaNeueRoman", Helvetica, Arial, sans-serif;
+  min-width: 80px;
+  cursor: pointer;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 20px;
+  border: 0;
+  margin: 0px;
+  box-sizing: border-box;
+  color: #365ebf;
+  box-shadow: inset 0 0 0 1px #dcdcdc;
+  background-image: -webkit-linear-gradient(top, #fff 0%, #f2f2f2 100%);
+  background-image: linear-gradient(to bottom, #fff 0%, #f2f2f2 100%);
+  -webkit-font-smoothing: subpixel-antialiased;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn.dark:focus {
+  outline: none;
+  -webkit-box-shadow: inset 0 0 0 1px #365ebf, 0 0 0 2px #284784;
+  box-shadow: inset 0 0 0 1px #365ebf, 0 0 0 2px #284784;
+}
+
+.btn.dark:hover {
+  background-color: #2e4d6f;
+  background-image: none;
+}
+
+.btn.dark {
+  color: #fff;
+  box-shadow: none;
+  background-image: -webkit-linear-gradient(top, #537ca0 0%, #3e5c7f 100%);
+  background-image: linear-gradient(to bottom, #537ca0 0%, #3e5c7f 100%);
+}
+
+.btn.primary:hover, .button.primary:focus {
+  background-color: #24479b;
+  background-image: none;
+}
+
+.btn.primary {
+  color: #fff;
+  box-shadow: none;
+  background-image: -webkit-linear-gradient(top, #3e6cc9 0%, #2e50b6 100%);
+  background-image: linear-gradient(to bottom, #3e6cc9 0%, #2e50b6 100%);
+}
+
+.dropdown :global .btn-toolbar .btn-group,
+.Actions-dropdown :global .btn-toolbar .btn-group {
+  float: none;
+}
+
+.dropdown :global .dropdown-toggle:focus,
+.dropdown :global .dropdown-toggle:hover {
+  background-color: #24479b;
+  background-image: none;
+}
+
+.Actions-dropdown :global .dropdown-menu:after {
+  position: absolute;
+  top: 100%;
+  left: 60px;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #ffffff;
+  border-left: 6px solid transparent;
+  content: '';
+}
+.Actions-dropdown :global .dropdown-menu:before {
+  position: absolute;
+  top: 100%;
+  left: 59px;
+  display: inline-block;
+  border-right: 7px solid transparent;
+  border-top: 7px solid #ccc;
+  border-left: 7px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  content: '';
+}
+
+.Actions-dropdown :global .dropdown-menu a:focus,
+.Actions-dropdown :global .dropdown-menu a:hover,
+.Actions-dropdown :global .dropdown-menu a{
+  text-decoration: none;
+}
+
+.Actions-dropdown :global .dropdown-menu {
+  bottom: 153%;
+  margin-left: -27px;
+}
+
+.Actions-dropdown :global .dropdown-toggle{
+  color: #fff;
+}
+
+.Actions-dropdown :global .dropdown-toggle:focus,
+.Actions-dropdown :global .dropdown-toggle:hover{
+  text-decoration: none;
+}
+
+.Actions-dropdown :global .dropdown-toggle:after{
+  display: none;
+}
+
+.dropdown :global .dropdown-toggle{
+  color: #fff;
+  box-shadow: none;
+  background-image: -webkit-linear-gradient(top, #3e6cc9 0%, #2e50b6 100%);
+  background-image: linear-gradient(to bottom, #3e6cc9 0%, #2e50b6 100%);
+
+  height: 34px;
+  line-height: 34px;
+  padding: 0 20px;
+  border: 0;
+  margin: 0px;
+  box-sizing: border-box;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+}
