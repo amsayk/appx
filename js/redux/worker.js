@@ -23,7 +23,7 @@ worker.registerTask('GROUP_OPS', function ({ since, version, forms }) {
 
 worker.registerTask('FILTER_OPS', function () {
 
-  const jsSearch = new Search('objectId');
+  const jsSearch = new Search('id');
   jsSearch.addIndex('displayName');
   jsSearch.addIndex('type');
 

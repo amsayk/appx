@@ -89,7 +89,7 @@ export default class Account extends React.PureComponent{
             theme={theme}
             reloadAccount={actions.reloadAccount}
             updateProfile={updateProfile}
-            initialValues={{ objectId: user.objectId, email: user.email, displayName: user.displayName, }}
+            initialValues={{ id: user.id, email: user.email, displayName: user.displayName, }}
           />
 
         <br/>

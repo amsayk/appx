@@ -149,7 +149,7 @@ const QUERY = gql`
   query getCompany($id: ID!){
 
       company(id: $id){
-					objectId
+					id
 					displayName
 
 					logo {

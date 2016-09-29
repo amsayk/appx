@@ -13,7 +13,7 @@ export default createSelector(
   (companies, filterText, selectedCompanyId) => ({ companies: doSearch(companies, filterText), filterText, selectedCompanyId })
 );
 
-const jsSearch = new Search('objectId');
+const jsSearch = new Search('id');
 jsSearch.addIndex('displayName');
 
 function doSearch(companies, filterText){

@@ -180,7 +180,7 @@ const QUERY = gql`
   query getForms($companyId: ID!, $offset: String){
 
     forms(companyId: $companyId, offset: $offset){
-      objectId
+      id
       displayName
       type
       createdAt
@@ -196,7 +196,7 @@ const withQuery = graphql(QUERY, {
   options: (ownProps) => ({
     variables: {
       offset: null,
-      companyId: ownProps.company.objectId,
+      companyId: ownProps.company.id,
     }
   }),
   props: ({ ownProps, data: { loading, errors, error, fetchMore, forms } }) => {
@@ -268,11 +268,11 @@ class PeriodList extends React.PureComponent{
         </div>
 
 
-        {items.map(function ({ type, objectId, displayName, timestamp, createdAt, updatedAt }) {
+        {items.map(function ({ type, id, displayName, timestamp, createdAt, updatedAt }) {
           return (
-            <div className={ theme.body_item } key={objectId}>
+            <div className={ theme.body_item } key={id}>
 
-              <a style={{ display: 'flex', alignItems: 'center' }} onClick={self.onItem.bind(self, type, objectId)} >
+              <a style={{ display: 'flex', alignItems: 'center' }} onClick={self.onItem.bind(self, type, id)} >
 
                 <div style={styles.icon}>{getLabel(type)}</div>
 

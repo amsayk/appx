@@ -102,19 +102,19 @@ export function asyncValidateProfile(values) {
     });
   }
   return new Promise((resolve, reject) => {
-    const objectId = values.get('objectId');
+    const id = values.get('id');
 
     // Email
     const emailQ = new Parse.Query(Parse.User);
     emailQ.equalTo('email', email);
 
-    objectId && emailQ.notEqualTo('objectId', objectId);
+    id && emailQ.notEqualTo('objectId', id);
 
     // Username
     const usernameQ = new Parse.Query(Parse.User);
     usernameQ.equalTo('username', email);
 
-    objectId && usernameQ.notEqualTo('objectId', objectId);
+    id && usernameQ.notEqualTo('objectId', id);
 
     const query = Parse.Query.or(
       emailQ,

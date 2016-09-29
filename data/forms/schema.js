@@ -10,7 +10,7 @@ const schema = [`
   }
 
   type CNSS implements Form{
-    objectId: ID!
+    id: ID!
     displayName: String
     type: FormType!
     createdAt: Date!
@@ -18,7 +18,7 @@ const schema = [`
     timestamp: Date!
   }
   type IR implements Form{
-    objectId: ID!
+    id: ID!
     displayName: String
     type: FormType!
     createdAt: Date!
@@ -26,7 +26,7 @@ const schema = [`
     timestamp: Date!
   }
   type IS implements Form{
-    objectId: ID!
+    id: ID!
     displayName: String
     type: FormType!
     createdAt: Date!
@@ -34,7 +34,7 @@ const schema = [`
     timestamp: Date!
   }
   type VAT implements Form{
-    objectId: ID!
+    id: ID!
     displayName: String
     type: FormType!
     createdAt: Date!
@@ -43,7 +43,7 @@ const schema = [`
   }
 
   interface Form {
-    objectId: ID!
+    id: ID!
     displayName: String
     type: FormType!
     createdAt: Date!
@@ -79,22 +79,22 @@ const resolvers = {
   CNSS: Object.assign(
     {
     },
-    parseGraphqlScalarFields([ 'objectId', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
+    parseGraphqlScalarFields([ 'id', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
   ),
   IR: Object.assign(
     {
     },
-    parseGraphqlScalarFields([ 'objectId', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
+    parseGraphqlScalarFields([ 'id', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
   ),
   IS: Object.assign(
     {
     },
-    parseGraphqlScalarFields([ 'objectId', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
+    parseGraphqlScalarFields([ 'id', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
   ),
   VAT: Object.assign(
     {
     },
-    parseGraphqlScalarFields([ 'objectId', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
+    parseGraphqlScalarFields([ 'id', 'displayName', 'type', 'createdAt', 'updatedAt', 'timestamp', ])
   ),
 
   AddFormOutput: Object.assign(

@@ -157,10 +157,10 @@ class SearchBox extends React.PureComponent{
 
     return (
       <DropdownMenu onClose={this.onRootClose} open={open && ! this.state.inTransition}>
-        {this.state.inTransition ? [] : this.state.results.map(function ({ type, displayName, objectId, timestamp, createdAt, updatedAt }) {
+        {this.state.inTransition ? [] : this.state.results.map(function ({ type, displayName, id, timestamp, createdAt, updatedAt }) {
           const nodes = intersperse(displayName.split(/\s+/).map(h.highlight), ' ');
           return (
-            <MenuItem onSelect={self.onItem.bind(self, type, objectId)} key={objectId} eventKey={objectId}>
+            <MenuItem onSelect={self.onItem.bind(self, type, id)} key={id} eventKey={id}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
 
                 <div style={styles.searchResultIcon}>{getLabel(type)}</div>
@@ -249,7 +249,7 @@ const QUERY = gql`
   query getAllForms($companyId: ID!){
 
     allForms(companyId: $companyId){
-      objectId
+      id
       displayName
       type
       createdAt
@@ -264,7 +264,7 @@ const QUERY = gql`
 const withQuery = graphql(QUERY, {
   options: (ownProps) => ({
     variables: {
-      companyId: ownProps.company.objectId,
+      companyId: ownProps.company.id,
     }
   }),
   props: ({ ownProps, data }) => {

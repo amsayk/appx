@@ -1,19 +1,19 @@
 {
   "main": {
-    "js": "http://localhost:8080/assets/a30db716.main.js",
-    "css": "http://localhost:8080/assets/a30db716.app.css"
+    "js": "http://localhost:8080/assets/4cdf8cca.main.js",
+    "css": "http://localhost:8080/assets/4cdf8cca.app.css"
   },
   "Login": {
     "js": "http://localhost:8080/assets/1.2a3e6994.Login.js"
   },
   "AppContainer": {
-    "js": "http://localhost:8080/assets/2.670d142f.AppContainer.js"
+    "js": "http://localhost:8080/assets/2.d35e46e5.AppContainer.js"
   },
   "Account": {
-    "js": "http://localhost:8080/assets/3.0bb6986e.Account.js"
+    "js": "http://localhost:8080/assets/3.028ce195.Account.js"
   },
   "Company": {
-    "js": "http://localhost:8080/assets/4.36ad3ef6.Company.js"
+    "js": "http://localhost:8080/assets/4.ebcc017c.Company.js"
   },
   "FileSaver": {
     "js": "http://localhost:8080/assets/5.f81c4948.FileSaver.js"

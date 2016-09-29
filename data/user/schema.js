@@ -3,7 +3,7 @@ const parseGraphqlScalarFields = require('../parseGraphqlScalarFields');
 const schema = [`
 
   type User{
-    objectId: ID!
+    id: ID!
 
     avatar: File
 
@@ -26,7 +26,7 @@ const resolvers = {
         return getObjectFile(obj, 'Avatar');
       }
     },
-    parseGraphqlScalarFields([ 'objectId', 'displayName', 'email', 'username', 'sessionToken', 'createdAt', 'updatedAt', ])
+    parseGraphqlScalarFields([ 'id', 'displayName', 'email', 'username', 'sessionToken', 'createdAt', 'updatedAt', ])
   ),
 
   Mutation: {

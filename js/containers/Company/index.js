@@ -69,7 +69,7 @@ const QUERY = gql`
   query getCompany($id: ID!){
 
     company(id: $id){
-      objectId
+      id
       displayName
 
       legalForm
@@ -104,7 +104,7 @@ const MUTATION = gql`
   mutation addOrUpdateCompany($id: ID, $fields: [FieldValueType!]!, $logo: FileItemInput){
     addOrUpdateCompany(id: $id, fields: $fields, logo: $logo) {
       company{
-        objectId
+        id
         displayName
 
         legalForm
@@ -154,7 +154,7 @@ const withMutations = graphql(MUTATION, {
             getCompanies: (previousQueryResult, { mutationResult }) => {
               const company = mutationResult.data.addOrUpdateCompany.company;
 
-              const index = find(previousQueryResult.companies, (f) => f.objectId == company.objectId);
+              const index = find(previousQueryResult.companies, (f) => f.id == company.id);
 
               if (index !== -1) {
                 return update(

@@ -146,11 +146,11 @@ class Company extends React.PureComponent {
         self.context.notificationMgr.notify({ message: 'Enregistrer avec succès!', });
         id || function (){
           const company = result.data.addOrUpdateCompany.company;
-          refresh(company.objectId);
+          refresh(company.id);
         }();
         id || function () {
           self.context.store.dispatch(
-              selectCompany(company.objectId));
+              selectCompany(company.id));
         }();
       }, function () {
         self.context.notificationMgr.notify({ message: 'Erreur! Veuillez essayer encore 😬.', type: 'danger', });

@@ -26,13 +26,13 @@ class AppContainer extends React.Component {
 
       companies: React.PropTypes.arrayOf(
         React.PropTypes.shape({
-          objectId: React.PropTypes.string.isRequired,
+          id: React.PropTypes.string.isRequired,
           displayName: React.PropTypes.string.isRequired,
         }).isRequired
       ).isRequired,
 
       currentUser: React.PropTypes.shape({
-        objectId: React.PropTypes.string.isRequired,
+        id: React.PropTypes.string.isRequired,
         displayName: React.PropTypes.string.isRequired,
         email: React.PropTypes.string.isRequired,
       }).isRequired,
@@ -67,7 +67,7 @@ const QUERY = gql`
   query getCompanies{
 
     companies{
-      objectId
+      id
       displayName
 
       legalForm

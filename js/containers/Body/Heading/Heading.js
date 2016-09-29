@@ -10,7 +10,7 @@ class Heading extends React.PureComponent{
       <div className={'heading'} style={styles.container}>
 
         <div className={theme.logo} style={{}}>
-          <a onClick={() => actions.onCompanyLogoClicked(company.objectId)} className={'btn btn-link'} style={styles.a}>
+          <a onClick={() => actions.onCompanyLogoClicked(company.id)} className={'btn btn-link'} style={styles.a}>
 
             {company.logo
               ?  <img {...styles.logo} src={company.logo.url}/>

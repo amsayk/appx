@@ -21,7 +21,7 @@ const rootSchema = [`
   }
 
   type File {
-    objectId: ID!
+    id: ID!
     name: String!
     contentType: String!
     url: String!
@@ -111,7 +111,7 @@ const rootResolvers = {
     {
     },
     parseGraphqlObjectFields([ 'user' ]),
-    parseGraphqlScalarFields([ 'objectId', 'name', 'contentType', 'url', 'createdAt', 'updatedAt', ])
+    parseGraphqlScalarFields([ 'id', 'name', 'contentType', 'url', 'createdAt', 'updatedAt', ])
   ),
 
 };

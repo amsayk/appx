@@ -120,9 +120,9 @@ export function asyncValidate(values) {
     const query = new Parse.Query(Company);
     query.equalTo('displayNameLowerCase', makeAlias(displayName));
 
-    const objectId = values.get('objectId');
+    const id = values.get('id');
 
-    objectId && query.notEqualTo('objectId', objectId);
+    id && query.notEqualTo('objectId', id);
 
     query.first().then(
       function (object) {

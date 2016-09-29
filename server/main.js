@@ -244,9 +244,9 @@ server.get([ '/', '/app', '/login' ], function (req, res) {
                 headers: req.headers,
               }),
               queryTransformer: addTypename,
-              dataIdFromObject: ({ objectId, __typename }) => {
-                if (objectId && __typename) { // eslint-disable-line no-underscore-dangle
-                  return __typename + '-' +  objectId; // eslint-disable-line no-underscore-dangle
+              dataIdFromObject: ({ id, __typename }) => {
+                if (id && __typename) { // eslint-disable-line no-underscore-dangle
+                  return __typename + '-' +  id; // eslint-disable-line no-underscore-dangle
                 }
                 return null;
               },

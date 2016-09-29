@@ -159,7 +159,7 @@ const FormWrapper = ({ name, title, designation }) => class extends React.PureCo
     const { actions, getPdf, initialValues, } = this.props;
 
     actions.openModal('pdfViewer', {
-      getPdf: () => getPdf(form.objectId).then((result) => result.data.getFormPdf.url),
+      getPdf: () => getPdf(form.id).then((result) => result.data.getFormPdf.url),
       title: initialValues.get('displayName'),
     });
   }
@@ -182,7 +182,7 @@ const FormWrapper = ({ name, title, designation }) => class extends React.PureCo
         self.context.notificationMgr.notify({ message: 'Enregistrer avec succès!' });
         id || function () {
           const form = result.data.addOrUpdateForm.form;
-          refresh(form.objectId);
+          refresh(form.id);
         }();
 
         if(close){

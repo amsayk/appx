@@ -20,9 +20,9 @@ function CompanyList({ theme, companies, filterText, selectedCompanyId, actions,
       {companies.map((company, index) => {
         const nodes = intersperse(company.displayName.split(/\s+/).map(h.highlight), ' ');
         return (
-          selectedCompanyId === company.objectId
+          selectedCompanyId === company.id
             ? <div className={cx([theme.CompanyItem, theme.Active])} key={index}>{nodes}</div>
-            : <a tabIndex={-1} onClick={() => actions.onCompanySelected(company.objectId)} className={cx([theme.CompanyItem, theme['CompanyItem--free']])} key={index}>{nodes}</a>
+            : <a tabIndex={-1} onClick={() => actions.onCompanySelected(company.id)} className={cx([theme.CompanyItem, theme['CompanyItem--free']])} key={index}>{nodes}</a>
         );
       })}
     </div>

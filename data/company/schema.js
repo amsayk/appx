@@ -11,7 +11,7 @@ const schema = [`
   }
 
   type Company{
-    objectId: ID!
+    id: ID!
     displayName: String!
 
     logo: File
@@ -61,7 +61,7 @@ const resolvers = {
         return getObjectFile(obj, 'Logo');
       }
     },
-    parseGraphqlScalarFields([ 'objectId', 'displayName', 'legalForm', 'activity', 'email', 'fax', 'webSite', 'streetAddress', 'cityTown', 'stateProvince', 'postalCode', 'country', 'ice', 'rc', 'patente', 'cnss', 'banque', 'rib', 'createdAt', 'updatedAt', ])
+    parseGraphqlScalarFields([ 'id', 'displayName', 'legalForm', 'activity', 'email', 'fax', 'webSite', 'streetAddress', 'cityTown', 'stateProvince', 'postalCode', 'country', 'ice', 'rc', 'patente', 'cnss', 'banque', 'rib', 'createdAt', 'updatedAt', ])
   ),
 
   AddCompanyOutput: Object.assign(

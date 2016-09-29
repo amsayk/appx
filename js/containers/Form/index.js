@@ -137,7 +137,7 @@ const QUERY = gql`
 	query getForm($id: ID!){
 
 		form(id: $id){
-			objectId
+			id
 			displayName
 
 			type
@@ -173,7 +173,7 @@ const CHANGE_MUTATION = gql`
 	mutation addOrUpdateForm($id: ID, $type: FormType!, $companyId: ID!, $fields: [FieldValueType!]!){
 		addOrUpdateForm(id: $id, type: $type, companyId: $companyId, fields: $fields) {
 			form{
-				objectId
+				id
 				displayName
 
 				type
@@ -199,7 +199,7 @@ const withChangeMutations = graphql(CHANGE_MUTATION, {
 					variables: {
 						id: ownProps.id,
 						type: ownProps.type,
-						companyId: ownProps.company.id || ownProps.company.objectId,
+						companyId: ownProps.company.id,
             fields: fields.filter(({ fieldName }) => ALLOW_FIELDS.indexOf(fieldName) !== -1),
 					},
 					updateQueries: {
@@ -223,7 +223,7 @@ const withChangeMutations = graphql(CHANGE_MUTATION, {
 							const form = mutationResult.data.addOrUpdateForm.form;
 
               if (ownProps.id) {
-                const index = find(previousQueryResult.forms, (f) => f.objectId === form.objectId);
+                const index = find(previousQueryResult.forms, (f) => f.id === form.id);
 
                 if (index !== -1) {
                   return update(
@@ -261,7 +261,7 @@ const withChangeMutations = graphql(CHANGE_MUTATION, {
 							const form = mutationResult.data.addOrUpdateForm.form;
 
               if (ownProps.id) {
-                const index = find(previousQueryResult.allForms, (f) => f.objectId === form.objectId);
+                const index = find(previousQueryResult.allForms, (f) => f.id === form.id);
 
                 if (index !== -1) {
                   return update(
@@ -335,7 +335,7 @@ const withDeleteMutations = graphql(DELETE_MUTATION, {
                 return previousQueryResult;
               }
               const id = mutationResult.data.delForm.deletedFormId;
-              const index = find(previousQueryResult.forms, (f) => f.objectId === id);
+              const index = find(previousQueryResult.forms, (f) => f.id === id);
 							return index !== -1 ? update(previousQueryResult, {
 								forms: {
 									$splice: [ [ index, 1 ] ],
@@ -349,7 +349,7 @@ const withDeleteMutations = graphql(DELETE_MUTATION, {
                 return previousQueryResult;
               }
 							const id = mutationResult.data.delForm.deletedFormId;
-              const index = find(previousQueryResult.allForms, (f) => f.objectId === id);
+              const index = find(previousQueryResult.allForms, (f) => f.id === id);
 							return index !== -1 ? update(previousQueryResult, {
 								allForms: {
 									$splice: [ [ index, 1 ] ],
