@@ -210,15 +210,11 @@ const withQuery = graphql(QUERY, {
       loading: false,
       hasErrors: false,
       loadMore() {
-        debugger;
         return fetchMore({
           variables: {
             offset: last && last.timestamp,
           },
           updateQuery: (previousQueryResult, { fetchMoreResult }) => {
-
-            debugger
-
             return {
               forms: [ ...previousQueryResult.forms, ...fetchMoreResult.data.forms ],
             };
