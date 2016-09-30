@@ -1,10 +1,12 @@
-const { Company, } = require('../types');
+import { Company } from '../types';
 
-const { makeAlias, } = require('../utils');
+import { makeAlias } from '../utils';
 
-const makeWords = require('../makeWords');
+import makeWords from '../makeWords';
 
-function addOrUpdateCompany(request, response){
+import { formatError } from '../utils';
+
+export default function addOrUpdateCompany(request, response){
   const company = new Company();
 
   const { id, data, } = request.params;
@@ -64,8 +66,6 @@ function addOrUpdateCompany(request, response){
     }
   );
 }
-
-module.exports = addOrUpdateCompany;
 
 // function addOrUpdateCompany(request, response) {
 //   const company = new Company();

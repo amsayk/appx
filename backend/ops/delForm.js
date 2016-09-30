@@ -1,7 +1,7 @@
-const { Form, } = require('../types');
-const { formatError, } = require('../utils');
+import { Form } from '../types';
+import { formatError } from '../utils';
 
-function delForm(request, response) {
+export default function delForm(request, response) {
   const form = new Form();
   form.id = request.params.id;
 
@@ -15,4 +15,3 @@ function delForm(request, response) {
   );
 }
 
-module.exports = delForm;

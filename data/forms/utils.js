@@ -1,18 +1,18 @@
-const memoize = require('lru-memoize');
+import memoize from 'lru-memoize';
 
-const casual = require('casual');
+import casual from 'casual';
 
-const moment = require('moment');
+import moment from 'moment';
 
 import find from 'lodash.findindex';
 
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
 import uuid from 'node-uuid';
 
-const {
+import {
   GENERATE_PDF,
-} = require('../../backend/constants');
+} from '../../backend/constants';
 
 import take from 'lodash.take';
 
@@ -132,7 +132,7 @@ extrapolate(since).forEach(function ({ from, to }) {
 });
 
 
-class MockForms {
+export class MockForms {
   constructor({ connector, user}) {
     this.connector = connector;
     this.user = user;
@@ -214,5 +214,3 @@ class MockForms {
   }
 }
 
-
-module.exports = { MockForms };

@@ -1,4 +1,4 @@
-const {
+import {
   ADD_OR_UPDATE_COMPANY,
   DELETE_COMPANY,
   ADD_OR_UPDATE_FORM,
@@ -6,18 +6,18 @@ const {
   UPDATE_PROFILE,
   CHANGE_PASSWORD,
   GENERATE_PDF,
-} = require('./constants');
+} from './constants';
 
-const addOrUpdateCompany = require('./ops/addOrUpdateCompany');
-const delCompany = require('./ops/delCompany');
+import addOrUpdateCompany from './ops/addOrUpdateCompany';
+import delCompany from './ops/delCompany';
 
-const addOrUpdateForm = require('./ops/addOrUpdateForm');
-const delForm = require('./ops/delForm');
+import addOrUpdateForm from './ops/addOrUpdateForm';
+import delForm from './ops/delForm';
 
-const updateProfile = require('./ops/updateProfile');
-const changePassword = require('./ops/changePassword');
+import updateProfile from './ops/updateProfile';
+import changePassword from './ops/changePassword';
 
-const genPdf = require('./ops/pdf/genPdf');
+import genPdf from './ops/pdf/genPdf';
 
 Parse.Cloud.define('routeOp', function (request, response) {
   const operationKey = request.params.__operationKey;

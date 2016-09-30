@@ -1,7 +1,7 @@
-const { Company, } = require('../types');
-const { formatError, } = require('../utils');
+import { Company } from '../types';
+import { formatError } from '../utils';
 
-function delCompany(request, response) {
+export default function delCompany(request, response) {
   const company = new Company();
   company.id = request.params.id;
 
@@ -18,4 +18,3 @@ function delCompany(request, response) {
   );
 }
 
-module.exports = delCompany;

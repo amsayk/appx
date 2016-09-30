@@ -5,63 +5,64 @@ process.on('uncaughtException', (ex) => {
   process.exit(1);
 });
 
-const path = require('path');
+import path from 'path';
 
-const cookie = require('react-cookie');
+import cookie from 'react-cookie';
 
-const React = require('react');
-const ReactDOM = require('react-dom/server');
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
-const { IntlProvider } = require('react-intl');
+import { IntlProvider } from 'react-intl';
 
-const intlLoader = require('./intl-loader');
+import intlLoader from './intl-loader';
 
-const express = require('express');
-// const serveStatic = require('serve-static');
+import express from 'express';
 
-const { default : createStore } = require('./store');
-const { default : getRoutes } = require('./routes');
+import createStore from './store';
+import getRoutes from './routes';
 
-const { default : ApolloClient, createNetworkInterface, addTypename } = require('apollo-client');
-const { ApolloProvider } = require('react-apollo');
+import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo';
 
-const { renderToStringWithData } = require('react-apollo/server');
-const { match, RouterContext } = require('react-router');
+import { renderToStringWithData } from 'react-apollo/server';
+import { match, RouterContext } from 'react-router';
 
-const { apolloExpress, graphiqlExpress } = require('apollo-server');
+import { apolloExpress, graphiqlExpress } from 'apollo-server';
 
-const {
+import {
   makeExecutableSchema,
-} = require('graphql-tools');
+} from 'graphql-tools';
 
-const { schema: Schema, resolvers: Resolvers } = require('../data/schema');
+import { schema as Schema, resolvers as Resolvers } from '../data/schema';
 
-const { CompaniesConnector } = require('../data/company/connector');
-const { FormsConnector } = require('../data/forms/connector');
-const { UserConnector } = require('../data/user/connector');
+import { CompaniesConnector } from '../data/company/connector';
+import { FormsConnector } from '../data/forms/connector';
+import { UserConnector } from '../data/user/connector';
 
-const { Companies } = require('../data/company/models');
-const { Forms } = require('../data/forms/models');
-const { Users } = require('../data/user/models');
+import { Companies } from '../data/company/models';
+import { Forms } from '../data/forms/models';
+import { Users } from '../data/user/models';
 
-const bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
 
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
-const compression = require('compression');
+import compression from 'compression';
 
-const fs = require('fs');
+import fs from 'fs';
 
-const ua = require('express-useragent');
+import ua from 'express-useragent';
 
-const cors = require('cors');
-const { ParseServer } = require('parse-server');
+import cors from 'cors';
+import { ParseServer } from 'parse-server';
 
 import { locales } from 'utils/i18n';
 
+import ejs from 'ejs';
+
 require('moment').locale('fr', locales['fr']);
 
-const morgan = require('morgan');
+import morgan from 'morgan';
 
 const databaseUri = process.env.DATABASE_URI || process.env.MONGOLAB_URI;
 if (! databaseUri) {
@@ -125,16 +126,12 @@ const getAssets = function () {
 server.set('views', path.resolve(process.cwd(), 'public'));
 server.set('view engine', 'html');
 
-server.engine('html', require('ejs').renderFile);
+server.engine('html', ejs.renderFile);
 
 server.use(
   '/assets/', express.static(path.resolve(process.cwd(), 'dist'), {
   maxAge: '180 days',
 }));
-
-// server.use(serveStatic('/assets/', {
-//   maxAge: 365 * 24 * 60 * 60
-// }));
 
 const executableSchema = makeExecutableSchema({
   typeDefs: Schema,
@@ -345,3 +342,4 @@ function https() {
     res.redirect('https://' + req.hostname + req.originalUrl);
   };
 }
+

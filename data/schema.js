@@ -1,12 +1,12 @@
-const { schema : companySchema, resolvers : companyResolvers,  } = require('./company/schema');
-const { schema : formsSchema, resolvers : formsResolvers,  } = require('./forms/schema');
-const { schema : userSchema, resolvers : userResolvers,  } = require('./user/schema');
+import { schema as companySchema, resolvers as companyResolvers } from './company/schema';
+import { schema as formsSchema, resolvers as formsResolvers } from './forms/schema';
+import { schema as userSchema, resolvers as userResolvers } from './user/schema';
 
-const merge = require('lodash.merge');
+import merge from 'lodash.merge';
 
-const parseGraphqlObjectFields = require('./parseGraphqlObjectFields');
-const parseGraphqlScalarFields = require('./parseGraphqlScalarFields');
-const parseJSONLiteral = require('./parseJSONLiteral');
+import parseGraphqlObjectFields from './parseGraphqlObjectFields';
+import parseGraphqlScalarFields from './parseGraphqlScalarFields';
+import parseJSONLiteral from './parseJSONLiteral';
 
 const rootSchema = [`
 
@@ -116,13 +116,12 @@ const rootResolvers = {
 
 };
 
-const schema = [
+export const schema = [
   ...rootSchema,
   ...userSchema,
   ...companySchema,
   ...formsSchema
 ];
 
-const resolvers = merge(rootResolvers, companyResolvers, formsResolvers, userResolvers);
+export const resolvers = merge(rootResolvers, companyResolvers, formsResolvers, userResolvers);
 
-module.exports = { schema, resolvers };

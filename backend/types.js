@@ -1,4 +1,2 @@
-module.exports = {
-  Company: Parse.Object.extend('Company'),
-  Form: Parse.Object.extend('Form'),
-};
+export const Company = Parse.Object.extend('Company');
+export const Form    = Parse.Object.extend('Form');

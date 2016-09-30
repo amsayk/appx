@@ -1,12 +1,12 @@
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
-const {
+import {
   ADD_OR_UPDATE_COMPANY,
   DELETE_COMPANY,
-  GENERATE_PDF
-} = require('../../backend/constants');
+  GENERATE_PDF,
+} from '../../backend/constants';
 
-class Companies {
+export class Companies {
   constructor({ connector, user }) {
     this.connector = connector;
     this.user = user;
@@ -37,4 +37,3 @@ class Companies {
   }
 }
 
-module.exports = {Companies};

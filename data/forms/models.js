@@ -1,13 +1,13 @@
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
-const {
+import {
   ADD_OR_UPDATE_FORM,
   DELETE_FORM,
   GENERATE_PDF,
   GET_FORMS,
-} = require('../../backend/constants');
+} from '../../backend/constants';
 
-class Forms {
+class FormsConnector {
   constructor({ connector, user }) {
     this.connector = connector;
     this.user = user;
@@ -50,4 +50,5 @@ class Forms {
   }
 }
 
-module.exports = { Forms: process.env.MOCK ? require('./utils').MockForms : Forms };
+export const Forms = process.env.MOCK ? require('./utils').MockForms : FormsConnector;
+

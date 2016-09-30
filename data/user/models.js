@@ -1,11 +1,11 @@
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
-const {
+import {
   UPDATE_PROFILE,
   CHANGE_PASSWORD,
-} = require('../../backend/constants');
+} from '../../backend/constants';
 
-class Users {
+export class Users {
   constructor({ user, connector, }) {
     this.user = user;
     this.connector = connector;
@@ -31,4 +31,3 @@ class Users {
   }
 }
 
-module.exports = {Users};

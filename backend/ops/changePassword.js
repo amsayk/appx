@@ -1,6 +1,6 @@
-const { formatError, } = require('../utils');
+import { formatError } from '../utils';
 
-module.exports = function(request, response){
+export default function(request, response){
   const { newPassword, } = request.params;
 
   if(!request.user){

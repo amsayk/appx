@@ -1,6 +1,6 @@
-const charMap = require('./charmaps');
+import charMap from './charmaps';
 
-function normalize(origString, keepCase){
+export function normalize(origString, keepCase){
 	var newString = origString;
 
 	for(var char in charMap){
@@ -14,4 +14,3 @@ function normalize(origString, keepCase){
 	return keepCase? origString : origString.toLowerCase();
 };
 
-module.exports = { normalize };

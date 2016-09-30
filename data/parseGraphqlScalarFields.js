@@ -1,4 +1,4 @@
-module.exports = function parseGraphqlScalarFields(fields){
+export default function parseGraphqlScalarFields(fields){
   return fields.reduce(function(fields, fieldName) {
     fields[fieldName] = (obj) => {
       switch (fieldName) {

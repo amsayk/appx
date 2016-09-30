@@ -1,10 +1,10 @@
-const DataLoader = require('dataloader');
+import DataLoader from 'dataloader';
 
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
 const Type = Parse.Object.extend('Company');
 
-class CompaniesConnector {
+export class CompaniesConnector {
   constructor() {
     this.loader = new DataLoader(this.fetch.bind(this), {
     });
@@ -26,4 +26,3 @@ class CompaniesConnector {
   }
 }
 
-module.exports = { CompaniesConnector, };

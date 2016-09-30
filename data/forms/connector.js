@@ -1,11 +1,11 @@
-const DataLoader = require('dataloader');
+import DataLoader from 'dataloader';
 
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
 const Type = Parse.Object.extend('Form');
 const Company = Parse.Object.extend('Company');
 
-class FormsConnector {
+export class FormsConnector {
   constructor() {
     this.loader = new DataLoader(this.fetch.bind(this), {
     });
@@ -51,4 +51,3 @@ class FormsConnector {
   }
 }
 
-module.exports = { FormsConnector, };

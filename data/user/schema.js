@@ -1,6 +1,6 @@
-const parseGraphqlScalarFields = require('../parseGraphqlScalarFields');
+import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
 
-const schema = [`
+export const schema = [`
 
   type User{
     id: ID!
@@ -18,7 +18,7 @@ const schema = [`
 
 `];
 
-const resolvers = {
+export const resolvers = {
 
   User: Object.assign(
     {
@@ -52,4 +52,3 @@ const resolvers = {
 
 };
 
-module.exports = {schema, resolvers};

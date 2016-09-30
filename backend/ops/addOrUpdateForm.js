@@ -1,10 +1,10 @@
-const { Form, } = require('../types');
+import { Form } from '../types';
 
-const { withCompany, makeAlias, formatError, } = require('../utils');
+import { withCompany, makeAlias, formatError } from '../utils';
 
-const makeWords = require('../makeWords');
+import makeWords from '../makeWords';
 
-function addOrUpdateForm(request, response){
+export default function addOrUpdateForm(request, response){
   const form = new Form();
 
   const { id, companyId, type, data, } = request.params;
@@ -79,4 +79,3 @@ function addOrUpdateForm(request, response){
 
 }
 
-module.exports = addOrUpdateForm;

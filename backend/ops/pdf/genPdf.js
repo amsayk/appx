@@ -1,5 +1,5 @@
 
-module.exports = function(request, response){
+export default function(request, response){
   response.success({ url: URL, });
 }
 

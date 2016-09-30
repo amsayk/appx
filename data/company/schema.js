@@ -1,7 +1,7 @@
-const parseGraphqlScalarFields = require('../parseGraphqlScalarFields');
-const getObjectFile = require('../getObjectFile');
+import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
+import getObjectFile from '../getObjectFile';
 
-const schema = [`
+export const schema = [`
 
   enum LegalForm {
     AU
@@ -53,7 +53,7 @@ const schema = [`
 
 `];
 
-const resolvers = {
+export const resolvers = {
 
   Company: Object.assign(
     {
@@ -117,4 +117,3 @@ const resolvers = {
   },
 };
 
-module.exports = {schema, resolvers};

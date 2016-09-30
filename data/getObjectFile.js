@@ -1,8 +1,8 @@
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
 const File = ({ id }) => Parse.Object.extend('File_' + id);
 
-module.exports = function getObjectFile(obj, type) {
+export default function getObjectFile(obj, type) {
   const Type = File({ id: type === 'Logo' || type == 'Avatar' ? obj.id : obj.get('company').id, });
 
   const qry = new Parse.Query(Type);

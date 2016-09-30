@@ -1,10 +1,10 @@
-const DataLoader = require('dataloader');
+import DataLoader from 'dataloader';
 
-const Parse = require('parse/node');
+import Parse from 'parse/node';
 
 const Type = Parse.User;
 
-class UserConnector {
+export class UserConnector {
   constructor() {
     this.loader = new DataLoader(this.fetch.bind(this), {
     });
@@ -21,4 +21,3 @@ class UserConnector {
   }
 }
 
-module.exports = { UserConnector, };

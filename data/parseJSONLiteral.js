@@ -1,4 +1,4 @@
-module.exports = function parseJSONLiteral(ast) {
+export default function parseJSONLiteral(ast) {
   switch (ast.kind) {
     case Kind.STRING:
     case Kind.BOOLEAN:

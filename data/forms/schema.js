@@ -1,6 +1,6 @@
-const parseGraphqlScalarFields = require('../parseGraphqlScalarFields');
+import parseGraphqlScalarFields from '../parseGraphqlScalarFields';
 
-const schema = [`
+export const schema = [`
 
   enum FormType{
     CNSS
@@ -61,7 +61,7 @@ const schema = [`
 
 `];
 
-const resolvers = {
+export const resolvers = {
 
   Form: {
     __resolveType(obj, context, info){
@@ -186,4 +186,3 @@ const resolvers = {
 
 };
 
-module.exports = {schema, resolvers};
