@@ -74,6 +74,7 @@ const FormWrapper = ({ name, title, designation }) => class extends React.PureCo
     }, 500);
 
   }
+
   constructor(...args){
     super(...args);
 
@@ -261,7 +262,7 @@ const FormWrapper = ({ name, title, designation }) => class extends React.PureCo
 }
 
 
-export default memoize(4)(({ name, title, designation }) => {
+export default memoize(4)(function ({ name, title, designation }) {
 
   const form = reduxForm({
     form:  `form.${name}`,

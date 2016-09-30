@@ -44,6 +44,7 @@ export default class ModalContainer{
         super(...args);
 
         this.addSteps = this.addSteps.bind(this);
+        this.removeSteps = this.removeSteps.bind(this);
         this.addTooltip = this.addTooltip.bind(this);
         this.isHelpSkipped = this.isHelpSkipped.bind(this);
         this.isStepCompleted = this.isStepCompleted.bind(this);
@@ -58,6 +59,7 @@ export default class ModalContainer{
 
         joyride: React.PropTypes.shape({
           addSteps: React.PropTypes.func.isRequired,
+          removeSteps: React.PropTypes.func.isRequired,
           addTooltip: React.PropTypes.func.isRequired,
         }).isRequired,
       };
@@ -67,6 +69,7 @@ export default class ModalContainer{
           notificationMgr: window.notificationMgr,
           joyride: {
             addSteps: this.addSteps,
+            removeSteps: this.removeSteps,
             addTooltip: this.addTooltip,
           },
         };
@@ -82,7 +85,7 @@ export default class ModalContainer{
           steps = [steps];
         }
 
-        steps = steps.filter(({ id, }) => ! this.isStepCompleted(id));
+        steps = steps.filter(({ id }) => ! this.isStepCompleted(id));
 
         if (!steps.length) {
           return false;
@@ -90,6 +93,16 @@ export default class ModalContainer{
 
         this.setState(function (currentState) {
           currentState.steps = currentState.steps.concat(this.refs.joyride.parseSteps(steps));
+          return currentState;
+        });
+      }
+      removeSteps(steps) {
+        if (!Array.isArray(steps)) {
+          steps = [steps];
+        }
+
+        this.setState(function (currentState) {
+          currentState.steps = currentState.steps.filter(({ id }) => ! steps.includes(id));
           return currentState;
         });
       }
