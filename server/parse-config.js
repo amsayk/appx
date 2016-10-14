@@ -16,4 +16,4 @@ const mountPath = process.env.PARSE_MOUNT || '/parse';
 
 const SERVER_URL = process.env.SERVER_URL || `http://localhost:${PORT}${mountPath}`;
 
-Parse.serverURL = process.env.SERVER_URL;
+Parse.serverURL = SERVER_URL;

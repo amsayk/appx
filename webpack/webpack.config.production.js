@@ -1,7 +1,5 @@
 'use strict';
 
-require('dotenv').config();
-
 const webpack = require('webpack');
 const path = require('path');
 const AssetsPlugin = require('assets-webpack-plugin');
@@ -123,7 +121,6 @@ module.exports = {
         GRAPHQL_ENDPOINT: JSON.stringify(process.env.GRAPHQL_ENDPOINT),
         APPX_ENV: JSON.stringify('client'),
         PARSE_MODULE_PATH: JSON.stringify('parse'),
-        MOCK: JSON.stringify(Boolean(process.env.MOCK)),
       }
     }),
     // Avoid publishing files when compilation fails

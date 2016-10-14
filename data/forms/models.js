@@ -1,5 +1,7 @@
 import Parse from 'parse/node';
 
+import moment from 'moment';
+
 import {
   ADD_OR_UPDATE_FORM,
   DELETE_FORM,
@@ -7,7 +9,7 @@ import {
   GET_FORMS,
 } from '../../backend/constants';
 
-class FormsConnector {
+export class Forms {
   constructor({ connector, user }) {
     this.connector = connector;
     this.user = user;
@@ -41,14 +43,38 @@ class FormsConnector {
     );
   }
 
-  getForms(companyId, { offset, limit = 25 }){
-    return this.connector.getAllPage(companyId, { offset, limit });
-  }
-
   getAllForms(companyId){
     return this.connector.getAll(companyId);
   }
+
+  getFormsByPage(companyId, from, to) {
+    return this.connector.getFormsByPage(companyId, from, to);
+  }
+  extrapolation(id, timestamp) {
+    const self = this;
+    const to = moment.utc(timestamp);
+
+    function count() {
+      return self.connector.countAll(id);
+    }
+
+    function extrapolatePages() {
+      return self.connector.extrapolatePages(id, to);
+    }
+
+    const queries = [
+      count(),
+      extrapolatePages()
+    ];
+
+    return Promise.all(queries).then(function ([ totalLength, pages ]) {
+      return {
+        totalLength,
+        timestamp: to.toDate(),
+        pages,
+      };
+    });
+  }
 }
 
-export const Forms = process.env.MOCK ? require('./utils').MockForms : FormsConnector;
 

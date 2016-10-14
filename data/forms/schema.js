@@ -59,9 +59,37 @@ export const schema = [`
     deletedFormId: ID!
   }
 
+  type Page {
+    id: ID!
+    title: String!
+    length: Int!
+    to: Date!
+    from: Date!
+  }
+
+  type Extrapolation {
+    totalLength: Int!
+    timestamp: Date!
+    pages: [Page!]!
+  }
+
 `];
 
 export const resolvers = {
+
+  Page: Object.assign(
+    {
+    },
+
+    parseGraphqlScalarFields([ 'id', 'title', 'length', 'from', 'to' ])
+  ),
+
+  Extrapolation: Object.assign(
+    {
+    },
+
+    parseGraphqlScalarFields([ 'totalLength', 'timestamp', 'pages' ])
+  ),
 
   Form: {
     __resolveType(obj, context, info){
@@ -160,17 +188,6 @@ export const resolvers = {
         });
     },
 
-    forms(_, { companyId, offset }, context) {
-       if (! context.user) {
-        throw new Error('Must be logged in.');
-      }
-
-      return Promise.resolve()
-        .then(() => {
-          return context.Forms.getForms(companyId, { offset });
-        });
-    },
-
     allForms(_, { companyId }, context) {
        if (! context.user) {
         throw new Error('Must be logged in.');
@@ -182,6 +199,26 @@ export const resolvers = {
         });
     },
 
+    formsByPage(_, { companyId, from, to }, context) {
+      if (! context.user) {
+        throw new Error('Must be logged in.');
+      }
+
+      return Promise.resolve()
+        .then(() => {
+          return context.Forms.getFormsByPage(companyId, from, to);
+        });
+    },
+    extrapolation(_, { companyId : id }, context) {
+      if (! context.user) {
+        throw new Error('Must be logged in.');
+      }
+
+      return Promise.resolve()
+        .then(() => {
+          return context.Forms.extrapolation(id, context.timestamp);
+        });
+    },
   },
 
 };

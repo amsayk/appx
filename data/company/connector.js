@@ -24,5 +24,6 @@ export class CompaniesConnector {
     const q = new Parse.Query(Type);
     return q.find();
   }
+
 }
 

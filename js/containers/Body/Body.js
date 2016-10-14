@@ -149,32 +149,32 @@ const QUERY = gql`
   query getCompany($id: ID!){
 
       company(id: $id){
-					id
-					displayName
+          id
+          displayName
 
-					logo {
-          	url
-					}
+          logo {
+            url
+          }
 
-					legalForm
-					activity
-					email
-					fax
-					webSite
+          legalForm
+          activity
+          email
+          fax
+          webSite
 
-					streetAddress
-					cityTown
-					stateProvince
-					postalCode
-					country
+          streetAddress
+          cityTown
+          stateProvince
+          postalCode
+          country
 
-					ice
-					rc
-					patente
-					cnss
-					banque
-					rib
-				}
+          ice
+          rc
+          patente
+          cnss
+          banque
+          rib
+        }
 
     }
 
@@ -190,10 +190,10 @@ const withQuery = graphql(QUERY, {
       if (data.errors || data.error) return { hasErrors: true, loading: false, };
 
       return {
-				company: data.company,
-				loading: false,
-				hasErrors: false,
-			};
+        company: data.company,
+        loading: false,
+        hasErrors: false,
+      };
     }
 });
 

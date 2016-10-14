@@ -4,8 +4,32 @@ import CSSModules from 'react-css-modules';
 
 import styles from './Loading.scss';
 
-class Loading extends React.Component {
+class Loading extends React.PureComponent {
+  shouldComponentUpdate(){
+    return false;
+  }
+  renderEllipsis() {
+    return (
+      <div>
+        <span className='Loader'>
+          <div styleName='Loader-indicator'>
+            <h6>
+              <span className='Loader-ellipsis'>
+                <span styleName='Loader-ellipsisDot'>&middot;</span>
+                <span styleName='Loader-ellipsisDot'>&middot;</span>
+                <span styleName='Loader-ellipsisDot'>&middot;</span>
+              </span>
+            </h6>
+          </div>
+        </span>
+      </div>
+    );
+  }
   render() {
+    if (this.props.type === 'dots') {
+      return this.renderEllipsis();
+    }
+
     return (
       <div styleName='loading-spinner' className='loading-spinner'>
 

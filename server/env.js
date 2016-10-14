@@ -12,6 +12,16 @@ babel({
     'transform-export-extensions'
   ],
   babelrc: false,
+  env: {
+    production: {
+      minified: true,
+      plugins: [
+        // 'transform-react-remove-prop-types',
+        // 'transform-react-constant-elements',
+        // 'transform-react-inline-elements'
+      ],
+    },
+  },
 });
 
 const sass = require('node-sass');

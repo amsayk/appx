@@ -4,10 +4,12 @@ import { withCompany, makeAlias, formatError } from '../utils';
 
 import makeWords from '../makeWords';
 
+const __DEV__ = process.env.NODE_ENV !== 'production';
+
 export default function addOrUpdateForm(request, response){
   const form = new Form();
 
-  const { id, companyId, type, data, } = request.params;
+  const { id, companyId, timestamp, type, data, } = request.params;
 
   if (typeof id !== 'undefined') {
     form.id = id;
@@ -22,7 +24,11 @@ export default function addOrUpdateForm(request, response){
         }
       });
 
-      obj.set('timestamp', new Date());
+      if (__DEV__) {
+        obj.set('timestamp', timestamp ? new Date(timestamp) : new Date());
+      } else {
+        obj.set('timestamp', new Date());
+      }
 
       obj.set('words', makeWords([
         obj.get('displayName'),
@@ -61,7 +67,12 @@ export default function addOrUpdateForm(request, response){
     });
 
     form.set('user', request.user);
-    form.set('timestamp', new Date());
+
+    if (__DEV__) {
+      form.set('timestamp', timestamp ? new Date(timestamp) : new Date());
+    } else {
+      form.set('timestamp', new Date());
+    }
 
     form.set('words', makeWords([
       form.get('displayName'),

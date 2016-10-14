@@ -6,20 +6,11 @@ require('moment').locale(__locale, locales[__locale]);
 
 import { createWorker, } from 'redux-worker';
 
-import { createOps } from 'containers/Body/Ops/utils';
-
 import { Search } from 'js-search';
 
 import isEmpty from 'lodash.isempty';
 
 const worker = createWorker();
-
-worker.registerTask('GROUP_OPS', function ({ since, version, forms }) {
-  return {
-    version,
-    ops: createOps(forms, since),
-  };
-});
 
 worker.registerTask('FILTER_OPS', function () {
 

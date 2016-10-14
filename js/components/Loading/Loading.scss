@@ -49,3 +49,78 @@
 .loading-spinner--global.loading-spinner {
   padding: 15% 35%;
 }
+
+
+// Dots
+
+.Loader-indicator.fade-enter,
+.Loader-content.fade-enter {
+  opacity: 0;
+}
+
+.Loader-indicator.fade-enter-active,
+.Loader-content.fade-enter-active {
+  opacity: 1;
+}
+
+.Loader-indicator.fade-leave,
+.Loader-content.fade-leave {
+  opacity: 1;
+}
+
+.Loader-indicator.fade-leave-active,
+.Loader-content.fade-leave-active {
+  opacity: 0;
+}
+
+.Loader-content,
+.Loader-indicator {
+  transition: opacity 1s;
+}
+
+.Loader-ellipsisDot {
+  padding: 0 3px 0 1px;
+  opacity: 0;
+  animation-duration: 3000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes Loader-ellipsisDot1 {
+  0%   { opacity: 0; }
+  25%  { opacity: 0; }
+  35%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes Loader-ellipsisDot2 {
+  0%   { opacity: 0; }
+  50%  { opacity: 0; }
+  60%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes Loader-ellipsisDot3 {
+  0%   { opacity: 0; }
+  75%  { opacity: 0; }
+  85%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+.Loader-ellipsisDot:nth-child(1) {
+  animation-name: Loader-ellipsisDot1;
+}
+
+.Loader-ellipsisDot:nth-child(2) {
+  animation-name: Loader-ellipsisDot2;
+}
+
+.Loader-ellipsisDot:nth-child(3) {
+  animation-name: Loader-ellipsisDot3;
+}
+
+.Loader-indicator h6 {
+  margin: 0;
+  font-size: 10px;
+}
+

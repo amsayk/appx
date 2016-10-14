@@ -35,5 +35,6 @@ export class Companies {
   getCompanies(){
     return this.connector.getAll();
   }
+
 }
 

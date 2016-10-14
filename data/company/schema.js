@@ -43,13 +43,9 @@ export const schema = [`
     company: Company!
   }
 
-  # union AddCompanyOutput = _AddCompanyOutput | Error
-
   type DelCompanyOutput{
     deletedCompanyId: ID!
   }
-
-  # union DelCompanyOutput = _DelCompanyOutput | Error
 
 `];
 
@@ -81,7 +77,8 @@ export const resolvers = {
         .then(() => {
           return context.Companies.getCompany(id);
         });
-    }
+    },
+
   },
 
   Mutation: {

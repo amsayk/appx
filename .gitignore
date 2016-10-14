@@ -1,3 +1,5 @@
+.git
+
 .tern-port
 
 webpack-assets.json
@@ -40,6 +42,7 @@ dist
 .idea/mongoSettings.xml
 
 .idea/
+.idea
 
 ## File-based project format:
 *.iws
@@ -95,8 +98,6 @@ Icon
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
-Network\ Trash\ Folder
-Temporary\ Items
 .apdisk
 
 .vscode/*

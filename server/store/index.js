@@ -4,7 +4,7 @@ import {
   INIT,
 } from 'utils/environment';
 
-import devTools from 'remote-redux-devtools';
+// import devTools from 'remote-redux-devtools';
 
 import makeRootReducer, { injectReducers } from './reducers';
 
@@ -19,10 +19,10 @@ const middlewares = [
 
 const enhancer = compose(
   applyMiddleware(...middlewares),
-  devTools({
-    name: 'Isomorphic Appx',
-    realtime: true,
-  })
+  // devTools({
+  //   name: 'Isomorphic Appx',
+  //   realtime: true,
+  // })
 );
 
 export default () => {
@@ -35,7 +35,7 @@ export default () => {
 
   // If you have other enhancers & middlewares
   // update the store after creating / changing to allow devTools to use them
-  devTools.updateStore(store);
+  // devTools.updateStore(store);
 
   return store;
 };

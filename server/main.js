@@ -60,7 +60,7 @@ import { locales } from 'utils/i18n';
 
 import ejs from 'ejs';
 
-require('moment').locale('fr', locales['fr']);
+import moment from 'moment'; moment.locale('fr', locales['fr']);
 
 import morgan from 'morgan';
 
@@ -159,12 +159,13 @@ server.use('/graphql', bodyParser.json(), apolloExpress(req => {
   function getUser() {
     const query = new Parse.Query(Parse.User);
     query.equalTo('sessionToken', token);
-    return query.first().then(user => user.toJSON());
+    return query.first().then(user => ({ id: user.id, ...user.toJSON() }));
   }
 
   return getUser(token).then(user => ({
     schema: executableSchema,
     context: {
+      timestamp: moment.utc(),
       user,
       Companies: new Companies({ connector: companiesConnector, user }),
       Users: new Users({ user, connector: userConnector }),

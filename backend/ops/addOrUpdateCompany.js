@@ -1,10 +1,14 @@
-import { Company } from '../types';
+import { Company, Form } from '../types';
 
 import { makeAlias } from '../utils';
 
 import makeWords from '../makeWords';
 
 import { formatError } from '../utils';
+
+import casual from 'casual';
+
+import orderBy from 'lodash.orderby';
 
 export default function addOrUpdateCompany(request, response){
   const company = new Company();
@@ -59,6 +63,9 @@ export default function addOrUpdateCompany(request, response){
 
   return company.save(null).then(
     function (object) {
+      if (process.env.MOCK_FORMS === 'true') {
+        mockCompanyForms(object);
+      }
       response.success({id: object.id});
     },
     function (error) {
@@ -67,151 +74,70 @@ export default function addOrUpdateCompany(request, response){
   );
 }
 
-// function addOrUpdateCompany(request, response) {
-//   const company = new Company();
-//
-//   const id = request.params.id;
-//
-//   if(id){
-//
-//     company.id = id;
-//
-//     return company.fetch().then(function (obj) {
-//
-//       request.params.fieldInfos.forEach(function (fieldInfo) {
-//         if (fieldInfo.fieldName === 'legalForm') {
-//           // obj.set(fieldInfo.fieldName, fieldInfo.value && parseInt(fieldInfo.value));
-//           obj.set(fieldInfo.fieldName, legalFormsMap[fieldInfo.value]);
-//           return;
-//         }
-//
-//         if (fieldInfo.fieldName === 'logo') {
-//           return;
-//         }
-//
-//         obj.set(fieldInfo.fieldName, fieldInfo.value);
-//
-//         if (fieldInfo.fieldName === 'displayName') {
-//           obj.set('displayNameLowerCase', makeAlias(fieldInfo.value));
-//         }
-//       });
-//
-//       obj.set('words', makeWords([
-//         obj.get('displayName'),
-//         obj.get('activity'),
-//       ]));
-//
-//       return obj.save(null).then(obj => {
-//         const logo = request.params.logo;
-//
-//         if (typeof logo !== 'undefined') {
-//
-//           function dropLogos() {
-//             const File = FileClass({id: obj.id,});
-//             const q = new Parse.Query(File);
-//             q.equalTo('type', 'Logo');
-//             q.equalTo('company', obj);
-//             return q.find().then(logos => Parse.Object.destroyAll(logos));
-//           }
-//
-//           if (logo) {
-//             const fp = new Parse.File(logo.name, {base64: logo.dataBase64,}, logo.type);
-//             return fp.save(null).then(fileObj => {
-//               const File = FileClass({id: obj.id,});
-//               const myLogo = new File();
-//
-//               myLogo.set('name', logo.name);
-//               myLogo.set('contentType', logo.type);
-//               myLogo.set('size', logo.size);
-//               myLogo.set('file', fileObj);
-//
-//               // myLogo.set('company', { className: 'Company', id: obj.id, });
-//
-//               myLogo.set('type', 'Logo');
-//               myLogo.set('company', obj);
-//
-//               return dropLogos().then(() => {
-//                 return myLogo.save(null);
-//               });
-//             }).then(() => obj);
-//           } else {
-//             return dropLogos().then(() => {
-//               return obj;
-//             });
-//           }
-//         }
-//
-//         return obj;
-//       });
-//     }).then(
-//       function (object) {
-//         response.success({companyId: object.id});
-//       },
-//       function (error) {
-//         response.error(formatError(error));
-//       }
-//     );
-//
-//   }else{
-//
-//     request.params.fieldInfos.forEach(function (fieldInfo) {
-//       if (fieldInfo.fieldName === 'legalForm') {
-//         // company.set(fieldInfo.fieldName, fieldInfo.value && parseInt(fieldInfo.value));
-//         company.set(fieldInfo.fieldName, legalFormsMap[fieldInfo.value]);
-//         return;
-//       }
-//
-//       if (fieldInfo.fieldName === 'logo') {
-//         return;
-//       }
-//
-//       company.set(fieldInfo.fieldName, fieldInfo.value);
-//
-//       if (fieldInfo.fieldName === 'displayName') {
-//         company.set('displayNameLowerCase', makeAlias(fieldInfo.value));
-//       }
-//     });
-//
-//     company.set('words', makeWords([
-//       company.get('displayName'),
-//       company.get('activity'),
-//     ]));
-//
-//     return company.save(null).then(obj => {
-//       const logo = request.params.logo;
-//
-//       if (typeof logo !== 'undefined') {
-//
-//         if (logo) {
-//           const fp = new Parse.File(logo.name, {base64: logo.dataBase64,}, logo.type);
-//           return fp.save(null).then(fileObj => {
-//             const File = FileClass({id: obj.id,});
-//             const myLogo = new File();
-//
-//             myLogo.set('name', logo.name);
-//             myLogo.set('contentType', logo.type);
-//             myLogo.set('size', logo.size);
-//             myLogo.set('file', fileObj);
-//
-//             myLogo.set('type', 'Logo');
-//             myLogo.set('company', obj);
-//
-//             return myLogo.save(null);
-//           }).then(() => obj);
-//         } else {
-//           return obj;
-//         }
-//       }
-//
-//       return company;
-//     }).then(
-//       function (object) {
-//         response.success({companyId: object.id});
-//       },
-//       function (error) {
-//         response.error(formatError(error));
-//       }
-//     );
-//   }
-//
-// }
+// Not completely safe but works in this case
+function mockCompanyForms(company) {
+  const isMocked = company.has('isMocked') ? company.get('isMocked') : false;
+
+  if (isMocked) {
+    console.log('[MOCK]: already done.');
+    return Promise.resolve();
+  }
+
+  company.set('isMocked', true);
+  return company.save(null).then(function () {
+
+    function randomDate(start, end, startHour, endHour) {
+      const date = new Date(+start + Math.random() * (end - start));
+      const hour = startHour + Math.random() * (endHour - startHour) | 0;
+      date.setHours(hour);
+      return date;
+    }
+
+    casual.define('form', function (timestamp){
+      return {
+        displayName: casual.title,
+        type: casual.random_element([ 'CNSS', 'IR', 'IS', 'VAT' ]),
+        timestamp: timestamp,
+      };
+    });
+
+
+    let forms = [];
+    let to = moment.utc();
+
+    const s = moment.utc().add(-1 * parseInt(process.env.MOCK_SINCE_DATE), 'years');
+
+    extrapolate(s, to).forEach(function ({ id, from, to : end, title }) {
+      const array = [];
+
+      for (let i = 0, len = casual.integer(25, 50); i < len; i++ ) {
+        const timestamp = randomDate(
+          moment.utc(from).add(1, 'hour').toDate(), moment.utc(end).add(1, 'hour').toDate(), from.hour() + 1, (to.isSame(end, 'day') ? to.hour() + 1 : end.hour()));
+
+        array.push(casual.form(timestamp));
+      }
+
+      forms.push(...orderBy(array, [ 'timestamp' ], [ 'desc' ]));
+    });
+
+    console.log('[MOCK]: start');
+
+    return Parse.Object.saveAll(forms.map(({ type, timestamp, displayName }) => {
+      const f = new Form();
+      f.set({
+        kind: 'Form',
+        type,
+        timestamp,
+        displayName,
+        displayNameLowerCase: makeAlias(displayName),
+        words: makeWords([ displayName ]),
+        company,
+      });
+      return f;
+    })).then(() => {
+      console.log('MOCK: done, ', forms.length, ' forms added.');
+    });
+  });
+
+}
+

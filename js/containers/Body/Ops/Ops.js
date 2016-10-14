@@ -14,8 +14,6 @@ import gql from 'graphql-tag';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import DropdownMenu from 'react-bootstrap/lib/DropdownMenu';
 
-import { createOps } from './utils';
-
 import {
   isServer,
 } from 'utils/environment';
@@ -24,162 +22,250 @@ import {
   intlShape,
 } from 'react-intl';
 
+import ScrollSpy, { Anchor } from 'components/ScrollSpy';
 
-let Page, ScrollPagination, manager;
+import intersperse from 'utils/intersperse';
 
-if (isServer) {
-
-  ScrollPagination = Page = ({ children, ...props }) => <div {...props}>{children}</div>;
-
-} else {
-
-  const S = require('components/react-scroll-pagination');
-
-  ScrollPagination = S.ScrollPagination;
-  Page = ScrollPagination.Page;
-
-  manager = new ScrollPagination.Manager();
-}
-
-
-class OpsLoad extends React.PureComponent{
-  static contextTypes = {
-    store: React.PropTypes.object.isRequired,
-  };
-
-  state = {
-    version: 0,
-    ops: [],
-    loading: false,
-  };
-
-  constructor(...args) {
-    super(...args);
-
-    this.loadMore = this.loadMore.bind(this);
-  }
-
-  loadMore() {
-    const { loading, hasErrors  } = this.props;
-    if (loading || hasErrors) {
-      return;
-    }
-
-    this.props.loadMore();
-  }
-
-  componentWillReceiveProps(nextProps){
-    if (isServer) {
-      return;
-    }
-
-    const self = this;
-
-    const { loading, hasErrors, forms, company } = nextProps;
-    const { version } = this.state;
-
-    if(! loading && ! hasErrors) {
-
-      this.setState({
-        loading: true,
-      }, function () {
-
-        const args = {
-          version,
-          forms,
-          since: (
-            process.env.NODE_ENV === 'production'
-            ? process.env.MOCK ? moment.utc().add(-15, 'years') : moment.utc(company.createdAt)
-            : moment.utc().add(-15, 'years')
-          ).startOf('day').toJSON(),
-        };
-
-        self.context.store.dispatch({
-          task: 'GROUP_OPS',
-          ...args,
-        }).then(function ({ response }) {
-          const { version, ops } = response;
-          if(version === self.state.version){
-            self.setState({
-              loading: false,
-              ops,
-            });
-          }
-        });
-      });
-    } else {
-      this.setState({
-        version: version + 1,
-        loading: false,
-      });
-    }
-  }
+class Extrapolation extends React.PureComponent {
 
   render() {
-    const { theme, loading, hasErrors, forms = [], company, actions } = this.props;
+    const { theme, hasErrors, loading, extrapolation, company, actions } = this.props;
 
     if (hasErrors) {
-      return (
-        null
-      );
+      return null;
     }
 
-    const isLoading = loading || this.state.loading;
-
-    if (isLoading/* || isServer*/) {
-
-      if(! isEmpty(this.state.ops)){
-        return (
-          <Ops actions={actions} company={company} ops={this.state.ops} loadMore={this.loadMore} theme={theme}/>
-        );
-      }
-
-      if (forms.length > 0 && this.state.ops.length === 0) {
-        return (
-          <Ops
-            actions={actions}
-            ops={getOps()}
-            loadMore={this.loadMore}
-            theme={theme}
-            company={company}
-          />
-        );
-      }
-
+    if (loading) {
       return (
         <Loading/>
       );
     }
 
-    function getOps() {
-      const since =  (
-        process.env.NODE_ENV === 'production'
-        ? process.env.MOCK ? moment.utc().add(-15, 'years') : moment.utc(company.createdAt)
-          : moment.utc().add(-15, 'years')
-        ).startOf('day').toJSON();
-      return createOps(
-        forms,
-        since
+    if (extrapolation) {
+      const { pages, totalLength } = extrapolation;
+
+      if (totalLength === 0) {
+        return (
+          <div className={'body'} style={{ flex: 1, overflowY: 'auto' }}>
+            <div style={styles.center}>Aucun formulaires à afficher.</div>
+          </div>
+        );
+      }
+
+      return (
+        <ScrollSpy>
+          <div className={'body'} style={{ flex: 1, overflowY: 'auto' }}>
+            {pages.map(function ({ id, title, from, to, length }, index) {
+              return  (
+                <Anchor id={index} key={id}>
+                  <PageLoad
+                    company={company}
+                    actions={actions}
+                    theme={theme}
+                    id={id}
+                    from={from}
+                    to={to}
+                    length={length}
+                    title={title}
+                    extrapolation={extrapolation}
+                    index={index}
+                  />
+                </Anchor>
+              );
+            })}
+            <div className={''} style={{ borderTop: '1px solid #ccc', padding: '20px 0' }}>
+              <div style={styles.center}>Plus de formulaires à afficher.</div>
+            </div>
+          </div>
+        </ScrollSpy>
       );
     }
+  }
+}
+
+const EXTRAPOLATION_QUERY = gql`
+
+  query getExtrapolation($companyId: ID!) {
+
+    extrapolation(companyId: $companyId) {
+      totalLength
+      timestamp
+      pages {
+        id
+        title
+        from
+        to
+        length
+      }
+    }
+
+  }
+
+`;
+
+const withExtrapolationQuery = graphql(EXTRAPOLATION_QUERY, {
+  options: (ownProps) => ({
+    variables: {
+      companyId: ownProps.company.id,
+    },
+  }),
+  props: ({ ownProps, data: { loading, error, errors, extrapolation } }) => {
+    if (loading) return { loading: true, hasErrors: false };
+    if (errors || error) return { hasErrors: true, loading: false };
+
+    return {
+      extrapolation,
+      loading: false,
+      hasErrors: false,
+    };
+  }
+})
+
+Extrapolation = withExtrapolationQuery(Extrapolation);
+
+class PageLoad extends React.PureComponent {
+  render() {
+    const { theme, index, extrapolation, length, id, title, activeTarget = 0 } = this.props;
+
+    if (length === 0) {
+      return null;
+    }
+
+    function doSkip(extrapolation, index) {
+      let acc = 0;
+
+      for (let i = 0; i < index; i++) {
+        const page = extrapolation.pages[i];
+        acc += page.length;
+      }
+
+      return acc >= 25;
+    }
+
+    const active = index <= activeTarget;
+
+    const skip = ! active && doSkip(extrapolation, index);
 
     return (
-      <Ops
-        actions={actions}
-        ops={isServer || (forms.length > 0 && this.state.ops.length === 0) ? getOps() : this.state.ops}
-        loadMore={this.loadMore}
-        theme={theme}
-        company={company}
-      />
+      <Page {...this.props} skip={skip}/>
     );
   }
 }
 
-const QUERY = gql`
+class PageInfo extends React.PureComponent {
+  static propTypes = {
+    length: React.PropTypes.number.isRequired,
+    forms: React.PropTypes.array.isRequired,
+  };
+  constructor(...args) {
+    super(...args);
 
-  query getForms($companyId: ID!, $offset: String){
+    this.onHover = this.onMouse.bind(this, true);
+    this.onBlur = this.onMouse.bind(this, false);
+  }
+  state = { onHover: false };
+  onMouse(state) {
+    this.setState({
+      onHover: state,
+    });
+  }
+  render() {
+    const { theme, length, forms } = this.props;
+    const { onHover  } = this.state;
 
-    forms(companyId: $companyId, offset: $offset){
+    function splitByType() {
+      const groups = forms.reduce((res, { type })=> {
+        if (! res[type]) {
+          res[type] = 0;
+        }
+        res[type]++;
+        return res;
+      }, {});
+      const comps = Object.keys(groups).map((key) => {
+        return (
+          <em>
+            <span>{key === 'VAT' ? 'TVA' : key}</span>: <b>{groups[key]}</b>
+          </em>
+        );
+      });
+
+      return intersperse(comps, ', ');
+    }
+
+    return (
+      <div onMouseEnter={this.onHover} onMouseLeave={this.onBlur} className={theme.h6} style={{ opacity: onHover ? 1.0 : 0.3, textTransform: 'none', fontStyle: 'italic', minWidth: 300, textAlign: 'right' }}>
+        {length} {length > 1 ? 'formulaires' : 'formulaire'}
+        {onHover
+            ? <span> ({splitByType()})</span>
+            : null}
+      </div>
+    );
+  }
+}
+
+class Page extends React.PureComponent {
+  static contextTypes = {
+    intl: intlShape.isRequired,
+  };
+  onItem(type, id) {
+    this.props.actions.openForm({ type, id, company: this.props.company });
+  }
+  render() {
+    const self = this;
+    const { theme, hasErrors, loading, forms = [], actions, id, title, length, index, activeTarget = 0 } = this.props;
+
+    return (
+      <div id={id}>
+
+        <div className={ cx(theme.sticky, theme.body_header) } style={{ display: 'flex' }}>
+          <h6 className={theme.h6}>{title}</h6>
+
+          <div style={{ display: 'flex', flex: 1, justifyContent: 'flex-end' }}>
+            {loading ? <Loading type={ 'dots' }/> : <PageInfo theme={theme} length={length} forms={forms}/>}
+          </div>
+        </div>
+
+        <div style={{ height: index > activeTarget + 1 ? 0 : (length * 68.9555555556) }}>
+
+          {hasErrors ?  null :
+
+          forms.map(function ({ id, displayName, type, timestamp, updatedAt, createdAt }) {
+            return (
+              <div className={ theme.body_item } key={id}>
+
+                <a style={{ display: 'flex', alignItems: 'center' }} onClick={self.onItem.bind(self, type, id)} >
+
+                  <div style={styles.icon}>{getLabel(type)}</div>
+
+                  <div style={styles.info}>
+
+                    <div style={styles.displayName}>{displayName}</div>
+
+                    <div style={styles.date}>
+                      {self.context.intl.formatRelative(
+                        new Date(timestamp))}
+                      </div>
+
+                    </div>
+
+                  </a>
+
+                </div>
+            );
+          })}
+
+        </div>
+
+      </div>
+    );
+  }
+}
+
+const PAGE_QUERY = gql`
+
+  query getFormsByPage($companyId: ID!, $from: String!, $to: String!) {
+
+    forms: formsByPage(companyId: $companyId, from: $from, to: $to) {
       id
       displayName
       type
@@ -187,113 +273,40 @@ const QUERY = gql`
       updatedAt
       timestamp
     }
-
   }
 
 `;
 
-const withQuery = graphql(QUERY, {
+const withPageQuery = graphql(PAGE_QUERY, {
   options: (ownProps) => ({
     variables: {
-      offset: null,
       companyId: ownProps.company.id,
-    }
+      from: new Date(ownProps.from).toISOString(),
+      to: new Date(ownProps.to).toISOString(),
+    },
+    skip: ownProps.skip,
   }),
-  props: ({ ownProps, data: { loading, errors, error, fetchMore, forms } }) => {
-    if (loading) return { loading: true, hasErrors: false, };
-    if (errors || error) return { hasErrors: true, loading: false, };
+  props: ({ ownProps, data: { loading, error, errors, forms } }) => {
+    if (ownProps.length === 0 || ownProps.skip) {
+      return {
+        forms: [],
+        loading: false,
+        hasErrors: false,
+      };
+    }
 
-    const last = forms.length > 0 ? forms[forms.length - 1] : null;
+    if (loading) return { loading: true, hasErrors: false };
+    if (errors || error) return { hasErrors: true, loading: false };
 
     return {
       forms,
       loading: false,
       hasErrors: false,
-      loadMore() {
-        return fetchMore({
-          variables: {
-            offset: last && last.timestamp,
-          },
-          updateQuery: (previousQueryResult, { fetchMoreResult }) => {
-            return {
-              forms: [ ...previousQueryResult.forms, ...fetchMoreResult.data.forms ],
-            };
-          },
-        });
-      }
     };
   },
 });
 
-class Ops extends React.PureComponent{
-  render(){
-    const { theme, ops, actions, company } = this.props;
-    let isEmpty = true;
-    return (
-      <ScrollPagination hasPrevPage={true} hasNextPage={true} loadNextPage={this.props.loadMore} manager={manager} className={'body'} style={{ flex: 1, overflowY: 'auto' }}>
-        {ops.map(function ({ id, title, items }, index) {
-          if(items.length === 0) {
-            return null;
-          }
-          isEmpty = false;
-          return  (
-            <PeriodList company={company} actions={actions} key={id} id={id} theme={theme} items={items} title={title}/>
-          );
-        })}
-        {isEmpty && <div style={styles.center}>Aucun formulaires à afficher.</div>}
-      </ScrollPagination>
-    );
-  }
-}
-
-class PeriodList extends React.PureComponent{
-  static contextTypes = {
-    intl: intlShape.isRequired,
-  };
-  onItem(type, id) {
-    this.props.actions.openForm({ type, id, company: this.props.company });
-  }
-  render(){
-    const self = this;
-    const { theme, title, items, id } = this.props;
-    return (
-      <Page manager={manager} id={id} className={ cx(theme.body_periodList, { open: true }) }>
-
-        <div className={ cx(theme.sticky, theme.body_header) }>
-          <h6>{title}</h6>
-        </div>
-
-
-        {items.map(function ({ type, id, displayName, timestamp, createdAt, updatedAt }) {
-          return (
-            <div className={ theme.body_item } key={id}>
-
-              <a style={{ display: 'flex', alignItems: 'center' }} onClick={self.onItem.bind(self, type, id)} >
-
-                <div style={styles.icon}>{getLabel(type)}</div>
-
-                <div style={styles.info}>
-
-                  <div style={styles.displayName}>{displayName}</div>
-
-                  <div style={styles.date}>
-                    {self.context.intl.formatRelative(
-                      new Date(timestamp))}
-                  </div>
-
-                </div>
-
-              </a>
-
-            </div>
-          );
-        })}
-
-
-      </Page>
-    );
-  }
-}
+Page = withPageQuery(Page);
 
 const styles = {
    center: {
@@ -336,5 +349,5 @@ function getLabel(type) {
   }
 }
 
-export default withQuery(OpsLoad);
+export default Extrapolation;
 

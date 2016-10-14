@@ -73,7 +73,7 @@ class Login extends React.Component {
 
         if(parseObject){
 
-          const user = parseObject.toJSON();
+          const user = { id: parseObject.id, ...parseObject.toJSON() };
 
           cookie.save('app.login', email);
 

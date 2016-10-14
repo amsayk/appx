@@ -1,16 +1,16 @@
 import charMap from './charmaps';
 
 export function normalize(origString, keepCase){
-	var newString = origString;
+  var newString = origString;
 
-	for(var char in charMap){
-		var rex = new RegExp('[' + charMap[char].toString() + ']', 'g');
-		try{
-			origString = origString.replace(rex, char);
-		} catch(e) {
-			console.log('error', origString);
-		}
-	}
-	return keepCase? origString : origString.toLowerCase();
+  for(var char in charMap){
+    var rex = new RegExp('[' + charMap[char].toString() + ']', 'g');
+    try{
+      origString = origString.replace(rex, char);
+    } catch(e) {
+      console.log('error', origString);
+    }
+  }
+  return keepCase? origString : origString.toLowerCase();
 };
 

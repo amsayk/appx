@@ -167,7 +167,7 @@ class Profile extends React.Component{
 
       return updateProfile({ fields, }).then(function(result) {
         return getCurrentUser().fetch().then(function(user){
-          return reloadAccount(user.toJSON());
+          return reloadAccount({ id: user.id, ...user.toJSON() });
         });
       }).then(function() {
         self.context.notificationMgr.notify({ message: 'Succès!', });
@@ -254,7 +254,7 @@ class Password extends React.Component{
       }).then(function () {
         reset();
         return getCurrentUser().fetch().then(function (user) {
-          reloadAccount(user.toJSON());
+          reloadAccount({ id: user.id, ...user.toJSON() });
         });
       });
     }).then(function () {

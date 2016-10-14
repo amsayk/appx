@@ -4,6 +4,8 @@ import { schema as userSchema, resolvers as userResolvers } from './user/schema'
 
 import merge from 'lodash.merge';
 
+import moment from 'moment';
+
 import parseGraphqlObjectFields from './parseGraphqlObjectFields';
 import parseGraphqlScalarFields from './parseGraphqlScalarFields';
 import parseJSONLiteral from './parseJSONLiteral';
@@ -49,8 +51,10 @@ const rootSchema = [`
     companies: [Company!]!
     company(id: ID!): Company
     form(id: ID!): Form
-    forms(companyId: ID!, offset: String): [Form!]!
     allForms(companyId: ID!): [Form!]!
+
+    formsByPage(companyId: ID!, from: String!, to: String!): [Form!]!
+    extrapolation(companyId: ID!): Extrapolation!
   }
 
   type Mutation {
@@ -79,7 +83,15 @@ const rootResolvers = {
       return new Date(value); // value from the client
     },
     __serialize(value) {
-      return value.getTime(); // value sent to the client
+      if (value instanceof Date){
+        return value.getTime();   // value sent to the client
+      }
+
+      if (moment.isMoment(value)) {
+        return value.valueOf();  // value sent to the client
+      }
+
+      throw new Error('Invalid date: ' + value);
     },
     __parseLiteral (ast) {
       if (ast.kind === Kind.INT) {
@@ -124,4 +136,5 @@ export const schema = [
 ];
 
 export const resolvers = merge(rootResolvers, companyResolvers, formsResolvers, userResolvers);
+
 
