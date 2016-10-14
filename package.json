@@ -12,7 +12,7 @@
     "client:dev": "webpack-dev-server",
     "build-joyride-sass": "sass --no-cache js/containers/RootContainer/react-joyride.scss js/containers/RootContainer/react-joyride-compiled.css",
     "start": "npm run clean && npm run build && npm run build-joyride-sass && npm run link && node -r ./server/env server/main",
-    "build": "NODE_ENV=production webpack --progress",
+    "build": "NODE_ENV=production node_modules/.bin/webpack --progress",
     "clean": "cd dist && rm -fr * && cd .."
   },
   "repository": {
