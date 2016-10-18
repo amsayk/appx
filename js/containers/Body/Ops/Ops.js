@@ -27,6 +27,9 @@ import ScrollSpy, { Anchor } from 'components/ScrollSpy';
 import intersperse from 'utils/intersperse';
 
 class Extrapolation extends React.PureComponent {
+  scrollToTop = () => {
+    this.refs.scrollSpy && this.refs.scrollSpy.scrollToTop();
+  };
 
   render() {
     const { theme, hasErrors, loading, extrapolation, company, actions } = this.props;
@@ -53,7 +56,7 @@ class Extrapolation extends React.PureComponent {
       }
 
       return (
-        <ScrollSpy>
+        <ScrollSpy ref={'scrollSpy'}>
           <div className={'body'} style={{ flex: 1, overflowY: 'auto' }}>
             {pages.map(function ({ id, title, from, to, length }, index) {
               return  (
@@ -104,6 +107,7 @@ const EXTRAPOLATION_QUERY = gql`
 `;
 
 const withExtrapolationQuery = graphql(EXTRAPOLATION_QUERY, {
+  withRef: true,
   options: (ownProps) => ({
     variables: {
       companyId: ownProps.company.id,
@@ -118,8 +122,8 @@ const withExtrapolationQuery = graphql(EXTRAPOLATION_QUERY, {
       loading: false,
       hasErrors: false,
     };
-  }
-})
+  },
+});
 
 Extrapolation = withExtrapolationQuery(Extrapolation);
 

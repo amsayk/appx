@@ -46,8 +46,19 @@ export default class Panel extends React.Component {
     );
   }
 
+  scrollToTop = () => {
+    this.scrolling = true;
+    this.container.scrollTop = 0;
+    this.scrolling = false;
+  };
+
   handleScroll = () => {
     cancelAnimationFrame(this._rafID)
+
+    if (this.scrolling === true) {
+      return;
+    }
+
     this._rafID = requestAnimationFrame(() => {
         this.update();
     });

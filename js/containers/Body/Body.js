@@ -68,6 +68,12 @@ class Body extends React.PureComponent {
 }
 
 class CompanyLoad extends React.PureComponent{
+  onScrollToTop = () => {
+    const ref = this.refs.ops && this.refs.ops.getWrappedInstance();
+    if (ref) {
+      ref.scrollToTop();
+    }
+  }
   constructor(...args){
     super(...args);
 
@@ -96,12 +102,14 @@ class CompanyLoad extends React.PureComponent{
               theme={theme}
               company={companyCache}
               actions={actions}
+              onScrollToTop={this.onScrollToTop}
             />
 
             <Ops
               theme={theme}
               company={companyCache}
               actions={actions}
+              ref={'ops'}
             />
 
           </div>
@@ -131,12 +139,14 @@ class CompanyLoad extends React.PureComponent{
           company={company}
           theme={theme}
           actions={actions}
+          onScrollToTop={this.onScrollToTop}
         />
 
         <Ops
           company={company}
           theme={theme}
           actions={actions}
+          ref={'ops'}
         />
 
       </div>

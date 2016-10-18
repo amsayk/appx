@@ -4,10 +4,13 @@ import SearchBox from '../SearchBox';
 
 class Heading extends React.PureComponent{
   static displayName = 'BodyHeading';
+  onHeadingClicked = () => {
+    this.props.onScrollToTop();
+  };
   render(){
     const { theme, actions, company } = this.props;
     return (
-      <div className={'heading'} style={styles.container}>
+      <div onClick={this.onHeadingClicked} className={'heading'} style={styles.container}>
 
         <div className={theme.logo} style={{}}>
           <a onClick={() => actions.onCompanyLogoClicked(company.id)} className={'btn btn-link'} style={styles.a}>
