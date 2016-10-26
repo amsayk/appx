@@ -1,0 +1,22 @@
+version: '2'
+services:
+  app:
+    build: .
+    ports:
+     - "3000:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URI=mongodb://db:27017/appx
+      - APPLICATION_ID=appx.appId
+      - JAVASCRIPT_KEY=appx.jsKey
+      - MASTER_KEY=appx.masterKey
+      - CLIENT_CLASS_CREATION=true
+      - ANON_USERS=true
+      - SERVER_URL=http://localhost:3000/parse
+    depends_on:
+     - db
+  db:
+    image: mongo:latest
+    volumes:
+     - /var/lib/appx/data/db:/data/db
