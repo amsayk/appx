@@ -128,7 +128,7 @@ server.set('view engine', 'html');
 
 server.engine('html', ejs.renderFile);
 
-server.use(
+process.env.SERVER_ASSETS === 'true' && server.use(
   '/assets/', express.static(path.resolve(process.cwd(), 'dist'), {
   maxAge: '180 days',
 }));
