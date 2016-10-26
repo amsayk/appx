@@ -1,7 +1,7 @@
 {
   "name": "appx",
   "version": "0.1.0",
-  "description": "My app",
+  "description": "Gestion des formulaires comptable",
   "engines": {
     "node": ">=6.x.x",
     "npm": ">=3.x"
