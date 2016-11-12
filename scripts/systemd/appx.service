@@ -1,0 +1,12 @@
+Unit]
+Description=Compta Formulaires
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/appx
+ExecStart=/usr/bin/npm start
+
+[Install]
+WantedBy=multi-user.target
+
+
