@@ -1,5 +1,5 @@
 # Backend
-upstream backend  {
+upstream appx_backend  {
   server 127.0.0.1:5000;
 }
 
@@ -50,7 +50,7 @@ server {
   location @proxy {
     proxy_buffers     100 128k;
     proxy_buffer_size 128k;
-    proxy_pass        http://backend;
+    proxy_pass        http://appx_backend;
   }
 
 }
