@@ -6,6 +6,7 @@ webpack-assets.json
 
 .tmux
 .env*
+react-joyride-compiled.css
 
 .DS_Store
 

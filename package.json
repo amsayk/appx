@@ -10,7 +10,7 @@
     "server:dev": "nodemon --watch js/ --watch server/ --watch public/ --watch data/ --watch backend/ -r dotenv/config -r ./server/env --inspect ./server/main.js --exec node",
     "link": "pushd dist && for l in `ls ../public`; do ln -sf ../public/`basename $l` `basename $l`; done && popd",
     "client:dev": "webpack-dev-server",
-    "build-joyride-sass": "sass --no-cache js/containers/RootContainer/react-joyride.scss js/containers/RootContainer/react-joyride-compiled.css",
+    "build-joyride-sass": "node-sass --no-cache js/containers/RootContainer/react-joyride.scss js/containers/RootContainer/react-joyride-compiled.css",
     "start": "NODE_ENV=production node -r ./server/env server/main",
     "build": "npm run clean && NODE_ENV=production node_modules/.bin/webpack --progress && npm run build-joyride-sass && npm run link",
     "clean": "cd dist && rm -fr * && cd .."
