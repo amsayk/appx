@@ -1,5 +1,5 @@
-FROM node:latest
-EXPOSE 3000
+FROM node:6
+EXPOSE 5000
 ADD . /app
 WORKDIR /app
 

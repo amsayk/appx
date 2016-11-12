@@ -27,7 +27,7 @@ class Body extends React.PureComponent {
   render() {
     const { styles : theme, actions, selectedCompanyId, } = this.props;
     return (
-      <div style={{  height: '100vh', flex: 1 }}>
+      <div style={{ height: '100vh', flex: 1 }}>
 
         {selectedCompanyId
           ? <CompanyLoad actions={actions} theme={theme} selectedCompanyId={selectedCompanyId}/>

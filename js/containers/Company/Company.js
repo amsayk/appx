@@ -149,6 +149,7 @@ class Company extends React.PureComponent {
           refresh(company.id);
         }();
         id || function () {
+          const company = result.data.addOrUpdateCompany.company;
           self.context.store.dispatch(
               selectCompany(company.id));
         }();

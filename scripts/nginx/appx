@@ -1,6 +1,6 @@
 # Backend
 upstream backend  {
-  server 127.0.0.1:3001;
+  server 127.0.0.1:5000;
 }
 
 server {
@@ -12,7 +12,7 @@ server {
   access_log /var/log/nginx/appx-access.log timed;
   error_log  /var/log/nginx/appx-error.log;
 
-  root       /opt/appx/dist;
+  root       /opt/appx/dist/;
 
   # charset koi8-r;
 
@@ -40,7 +40,7 @@ server {
     add_header     Pragma "public";
     add_header     Cache-Control "public";
     expires        30d;
-    alias          /opt/compta/dist;
+    alias          /opt/appx/dist/;
   }
 
   location / {

@@ -1,4 +1,4 @@
-import ApolloClient, { addQueryMerging,  addTypename, } from 'apollo-client';
+import ApolloClient, {} from 'apollo-client';
 
 import getCurrentUser from 'utils/getCurrentUser';
 
@@ -35,14 +35,11 @@ responseMiddlewareNetworkInterface.use({
   }
 })
 
-const networkInterface = addQueryMerging(responseMiddlewareNetworkInterface);
-
 export const client = new ApolloClient({
   initialState: window.__APOLLO_STATE__,
   ssrForceFetchDelay: 100,
-  networkInterface,
-  shouldBatch: true,
-  queryTransformer: addTypename,
+  networkInterface: responseMiddlewareNetworkInterface,
+  addTypename: true,
   dataIdFromObject: ({ id, __typename }) => {
     if (id && __typename) { // eslint-disable-line no-underscore-dangle
       return __typename + '-' +  id; // eslint-disable-line no-underscore-dangle

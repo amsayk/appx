@@ -62,8 +62,8 @@ export class FormsConnector {
       }
 
       return new Parse.Query(Company).get(id).then(function (company) {
-        const s = process.env.MOCK_DATA === 'true'
-          ?  moment.utc().add(-1 * parseInt(process.env.MOCK_SINCE_DATE), 'years')
+        const s = typeof process.env.MOCK_DATA !== 'undefined'
+          ? moment.utc().add(-1 * parseInt(process.env.MOCK_SINCE_YEARS), 'years')
           : moment.utc(company.get('createdAt'));
         return Promise.all(
           extrapolate(s, to).map(function ({ id, from, to, title }) {

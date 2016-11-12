@@ -1,0 +1,38 @@
+import gql from 'graphql-tag';
+
+export default gql`
+
+  query getCompany($id: ID!){
+
+      company(id: $id){
+          id
+          displayName
+
+          logo {
+            url
+          }
+
+          legalForm
+          activity
+          email
+          fax
+          webSite
+
+          streetAddress
+          cityTown
+          stateProvince
+          postalCode
+          country
+
+          ice
+          rc
+          patente
+          cnss
+          banque
+          rib
+        }
+
+    }
+
+`;
+

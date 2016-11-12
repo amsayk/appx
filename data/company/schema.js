@@ -4,7 +4,7 @@ import getObjectFile from '../getObjectFile';
 export const schema = [`
 
   enum LegalForm {
-    AU
+    SA
     SNC
     SARL
     SARL_AU

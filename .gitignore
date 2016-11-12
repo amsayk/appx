@@ -5,7 +5,7 @@
 webpack-assets.json
 
 .tmux
-.env
+.env*
 
 .DS_Store
 

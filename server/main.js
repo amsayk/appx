@@ -1,9 +1,9 @@
 import log from './log';
 
-process.on('uncaughtException', (ex) => {
-  log.error(ex);
-  process.exit(1);
-});
+// process.on('uncaughtException', (ex) => {
+//   log.error(ex);
+//   process.exit(1);
+// });
 
 import path from 'path';
 
@@ -21,7 +21,7 @@ import express from 'express';
 import createStore from './store';
 import getRoutes from './routes';
 
-import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client';
+import ApolloClient, { createBatchingNetworkInterface, } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import { renderToStringWithData } from 'react-apollo/server';
@@ -64,6 +64,8 @@ import moment from 'moment'; moment.locale('fr', locales['fr']);
 
 import morgan from 'morgan';
 
+import ParseDashboard from 'parse-dashboard';
+
 const databaseUri = process.env.DATABASE_URI || process.env.MONGOLAB_URI;
 if (! databaseUri) {
   log('DATABASE_URI not specified, falling back to localhost.');
@@ -94,10 +96,35 @@ const api = new ParseServer({
   maxUploadSize: '25mb',
 });
 
+const dashboard = new ParseDashboard({
+  "apps": [
+    {
+      "appId": process.env.APPLICATION_ID,
+      "javascriptKey": process.env.JAVASCRIPT_KEY,
+      "masterKey": process.env.MASTER_KEY,
+      "serverURL": SERVER_URL,
+      "appName": "Isomorphic Appx",
+      "production": ! __DEV__,
+      "iconName": "ic_account_balance_wallet_black_48dp.png",
+    }
+  ],
+  "trustProxy": 1,
+  "useEncryptedPasswords": true,
+  "users": [
+    {
+      "user": 'amsayk',
+      "pass": '$2a$08$ayRVAV5Qj6tUuS0bMo5WOeer.YZciRFjtSQBQUgXcRh/Pe7od9sS2'
+    }
+  ]
+}, /* allowInsecureHTTP = */ __DEV__);
+
 server.use(cors());
 
 // Serve the Parse API on the /parse URL prefix
 server.use(mountPath, api);
+
+// Serve dashboard
+server.use("/dashboard", dashboard);
 
 server.use(ua.express());
 
@@ -231,17 +258,22 @@ server.get([ '/', '/app', '/login' ], function (req, res) {
             console.error('ROUTER ERROR:', error); // eslint-disable-line no-console
             res.status(500);
           } else if (renderProps) {
-            const client = new ApolloClient({
-              ssrMode: true,
-              // Remember that this is the interface the SSR server will use to connect to the
-              // API server, so we need to ensure it isn't firewalled, etc
-              networkInterface: createNetworkInterface(`http://localhost:${PORT}/graphql`, {
+            const networkInterface = createBatchingNetworkInterface({
+              uri: `http://localhost:${PORT}/graphql`,
+              batchInterval: process.env.BATCHING_INTERVAL ? parseInt(process.env.BATCHING_INTERVAL) : 10,
+              opts: {
                 credentials: 'same-origin',
                 // transfer request headers to networkInterface so that they're accessible to proxy server
                 // Addresses this issue: https://github.com/matthew-and/isomorphic-fetch/issues/83
                 headers: req.headers,
-              }),
-              queryTransformer: addTypename,
+              },
+            });
+            const client = new ApolloClient({
+              ssrMode: true,
+              addTypename: true,
+              // Remember that this is the interface the SSR server will use to connect to the
+              // API server, so we need to ensure it isn't firewalled, etc
+              networkInterface,
               dataIdFromObject: ({ id, __typename }) => {
                 if (id && __typename) { // eslint-disable-line no-underscore-dangle
                   return __typename + '-' +  id; // eslint-disable-line no-underscore-dangle
@@ -266,7 +298,7 @@ server.get([ '/', '/app', '/login' ], function (req, res) {
                 assets: getAssets(),
                 port: 8080,
                 appState: JSON.stringify(store.getState().toJS()),
-                apolloState: JSON.stringify(state),
+                apolloState: JSON.stringify({ apollo: { data: state.apollo.data } }),
                 html,
                 locale, // req.locale,
               });
