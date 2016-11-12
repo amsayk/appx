@@ -4,8 +4,8 @@ upstream appx_backend  {
 }
 
 server {
-  listen 80 default_server;
-  listen [::]:80 default_server;
+  listen 80;
+  listen [::]:80;
 
   server_name compta-formulaires.epsilon.ma;
 
