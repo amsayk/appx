@@ -33,3 +33,4 @@ export const injectReducers = (store, reducers) => {
 };
 
 export default makeRootReducer;
+

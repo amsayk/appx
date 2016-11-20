@@ -21,7 +21,7 @@ import express from 'express';
 import createStore from './store';
 import getRoutes from './routes';
 
-import ApolloClient, { createBatchingNetworkInterface, } from 'apollo-client';
+import ApolloClient, { createBatchingNetworkInterface, toIdValue, } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import { renderToStringWithData } from 'react-apollo/server';
@@ -246,72 +246,20 @@ server.get([ '/', '/app', '/login' ], function (req, res) {
         // Mobile error
         res.end('Sorry, Mobile is unsupported.');
       } else {
-        cookie.plugToRequest(req, res);
 
-        const store = createStore();
-
-        match({ routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
-
-          if (redirectLocation) {
-            res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-          } else if (error) {
-            console.error('ROUTER ERROR:', error); // eslint-disable-line no-console
-            res.status(500);
-          } else if (renderProps) {
-            const networkInterface = createBatchingNetworkInterface({
-              uri: `http://localhost:${PORT}/graphql`,
-              batchInterval: process.env.BATCHING_INTERVAL ? parseInt(process.env.BATCHING_INTERVAL) : 10,
-              opts: {
-                credentials: 'same-origin',
-                // transfer request headers to networkInterface so that they're accessible to proxy server
-                // Addresses this issue: https://github.com/matthew-and/isomorphic-fetch/issues/83
-                headers: req.headers,
-              },
-            });
-            const client = new ApolloClient({
-              ssrMode: true,
-              addTypename: true,
-              // Remember that this is the interface the SSR server will use to connect to the
-              // API server, so we need to ensure it isn't firewalled, etc
-              networkInterface,
-              dataIdFromObject: ({ id, __typename }) => {
-                if (id && __typename) { // eslint-disable-line no-underscore-dangle
-                  return __typename + '-' +  id; // eslint-disable-line no-underscore-dangle
-                }
-                return null;
-              },
-            });
-
-            const app = (
-              <IntlProvider defaultLocale={'fr'} locale={locale} messages={messages} formats={formats}>
-                <ApolloProvider client={client} store={store} immutable>
-                  <RouterContext {...renderProps}/>
-                </ApolloProvider>
-              </IntlProvider>
-            );
-
-            renderToStringWithData(app).then(function ({ initialState : state, markup : html }) {
-              res.status(200);
-
-              res.render('index', {
-                dev: __DEV__,
-                assets: getAssets(),
-                port: 8080,
-                appState: JSON.stringify(store.getState().toJS()),
-                apolloState: JSON.stringify({ apollo: { data: state.apollo.data } }),
-                html,
-                locale, // req.locale,
-              });
-
-            }).catch(e => log.error('RENDERING ERROR:', e)); // eslint-disable-line no-console
-
-          } else {
-            res.status(404)
-              .send('Not found');
-          }
-
-        });
-
+        if (typeof process.env.SSR !== 'undefined') {
+          renderSSR();
+        } else {
+          res.render('index', {
+            dev: __DEV__,
+            assets: getAssets(),
+            port: 8080,
+            appState: JSON.stringify({}),
+            apolloState: JSON.stringify({ apollo: { data: {} } }),
+            html: '',
+            locale, // req.locale,
+          });
+        }
       }
 
       break;
@@ -319,6 +267,86 @@ server.get([ '/', '/app', '/login' ], function (req, res) {
     default:
       // Invalid user agent
       res.end('Sorry, unsupported browser. Please use Google Chrome.');
+  }
+
+  function renderSSR() {
+    cookie.plugToRequest(req, res);
+
+    const store = createStore();
+
+    match({ routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+
+      if (redirectLocation) {
+        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+      } else if (error) {
+        console.error('ROUTER ERROR:', error); // eslint-disable-line no-console
+        res.status(500);
+      } else if (renderProps) {
+
+        function dataIdFromObject({ id, __typename }) {
+          if (id && __typename) { // eslint-disable-line no-underscore-dangle
+            return __typename + '-' + id; // eslint-disable-line no-underscore-dangle
+          }
+          return null;
+        }
+
+        const networkInterface = createBatchingNetworkInterface({
+          uri: `http://localhost:${PORT}/graphql`,
+          batchInterval: process.env.BATCHING_INTERVAL ? parseInt(process.env.BATCHING_INTERVAL) : 10,
+          opts: {
+            credentials: 'same-origin',
+            // transfer request headers to networkInterface so that they're accessible to proxy server
+            // Addresses this issue: https://github.com/matthew-and/isomorphic-fetch/issues/83
+            headers: req.headers,
+          },
+        });
+        const client = new ApolloClient({
+          ssrMode: true,
+          addTypename: true,
+          // Remember that this is the interface the SSR server will use to connect to the
+          // API server, so we need to ensure it isn't firewalled, etc
+          networkInterface,
+          customResolvers: {
+            Query: {
+              getCompany: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Company', id, })),
+              getForm: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Form', id, })),
+            },
+          },
+          dataIdFromObject,
+        });
+
+        const app = (
+          <IntlProvider defaultLocale={'fr'} locale={locale} messages={messages} formats={formats}>
+            <ApolloProvider client={client} store={store} immutable>
+              <RouterContext {...renderProps}/>
+            </ApolloProvider>
+          </IntlProvider>
+        );
+
+        renderToStringWithData(app).then(function ({ markup : html }) {
+          res.status(200);
+
+          const apolloState = client.store.getState()[client.reduxRootKey];
+
+          res.render('index', {
+            dev: __DEV__,
+            assets: getAssets(),
+            port: 8080,
+            appState: JSON.stringify(store.getState().toJS()),
+            apolloState: JSON.stringify({ [client.reduxRootKey]: { data: apolloState.data } }),
+            html,
+            locale, // req.locale,
+          });
+
+        }).catch(e => log.error('RENDERING ERROR:', e)); // eslint-disable-line no-console
+
+      } else {
+        res.status(404)
+          .send('Not state');
+      }
+
+    });
+
   }
 
 });
@@ -337,7 +365,7 @@ server.listen(PORT, (err) => {
     ]).then(function () {
       log.info('Server initialized.');
     }, function (err) {
-      log.error('Error initialing server:', err);
+      log.error('Error initializing server:', err);
       throw err;
     });
 

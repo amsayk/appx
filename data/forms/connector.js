@@ -15,14 +15,14 @@ export class FormsConnector {
     });
 
     this.formsLoader = new DataLoader(this.loadForms.bind(this), {
-      cacheKeyFn: ([ id, from, to ]) => [ id, from, to ].join(':')
+      cacheKeyFn: ([ id, from, to ]) => [ id, from, moment(to).format() ].join(':')
     });
 
     this.countsLoader = new DataLoader(this.loadCounts.bind(this), {
     });
 
     this.extrapolationsLoader = new DataLoader(this.loadExtrapolations.bind(this), {
-      cacheKeyFn: ([ id, to ]) => [ id, to ].join(':')
+      cacheKeyFn: ([ id, to ]) => [ id, moment(to).format() ].join(':')
     });
 
     this.allLoader = new DataLoader(this.loadAll.bind(this), {
