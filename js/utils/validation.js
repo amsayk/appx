@@ -2,6 +2,8 @@
 //   defineMessages,
 // } from 'react-intl';
 
+import get from 'lodash.get';
+
 import isURL from 'validator/lib/isURL';
 
 const messages = /*defineMessages*/({
@@ -176,5 +178,8 @@ export function createValidator(rules) {
 }
 
 function getProp(data, key) {
-  return data.getIn(Array.isArray(key) ? key : [key]);
+  const path = Array.isArray(key) ? key : [key];
+  return data.getIn
+    ? data.getIn(path)
+    : get(data, path);
 }
