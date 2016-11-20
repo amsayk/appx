@@ -137,7 +137,7 @@ const MUTATION = gql`
 const withMutations = graphql(MUTATION, {
   props: ({ ownProps, mutate, }) => {
     return {
-      submit({ fields, logo, }) {
+      doMutationAction({ fields, logo, }) {
         return mutate({
           variables: { id: ownProps.id, fields, logo },
           updateQueries: {
