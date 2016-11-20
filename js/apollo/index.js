@@ -1,4 +1,4 @@
-import ApolloClient, {} from 'apollo-client';
+import ApolloClient, { toIdValue, } from 'apollo-client';
 
 import getCurrentUser from 'utils/getCurrentUser';
 
@@ -35,16 +35,24 @@ responseMiddlewareNetworkInterface.use({
   }
 })
 
+function dataIdFromObject({ id, __typename }) {
+  if (id && __typename) { // eslint-disable-line no-underscore-dangle
+    return __typename + '-' + id; // eslint-disable-line no-underscore-dangle
+  }
+  return null;
+}
+
 export const client = new ApolloClient({
   initialState: window.__APOLLO_STATE__,
   ssrForceFetchDelay: 100,
   networkInterface: responseMiddlewareNetworkInterface,
   addTypename: true,
-  dataIdFromObject: ({ id, __typename }) => {
-    if (id && __typename) { // eslint-disable-line no-underscore-dangle
-      return __typename + '-' +  id; // eslint-disable-line no-underscore-dangle
-    }
-    return null;
-  }
+  customResolvers: {
+    Query: {
+      getCompany: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Company', id, })),
+      getForm: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Form', id, })),
+    },
+  },
+  dataIdFromObject,
 });
 

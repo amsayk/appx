@@ -116,7 +116,7 @@ class RootContainer extends React.PureComponent {
 
         {function(){
           if(!displayMatches){
-            return <Center>Votre affichage trop petit.</Center>;
+            return <Center>Votre affichage est trop petit.</Center>;
           }
 
           if(!onLine){
@@ -166,3 +166,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RootContainer);
+
