@@ -8,6 +8,8 @@ import {
   GENERATE_PDF,
 } from './constants';
 
+import mockCompanyForms from './ops/mockCompanyForms';
+
 import addOrUpdateCompany from './ops/addOrUpdateCompany';
 import delCompany from './ops/delCompany';
 
@@ -57,6 +59,10 @@ Parse.Cloud.define('routeOp', function (request, response) {
 
 Parse.Cloud.define('initialization', function (request, response) {
   response.success({});
+});
+
+Parse.Cloud.define('mockCompanyForms', function (request, response) {
+  return mockCompanyForms(request, response);
 });
 
 Parse.Cloud.define('initUsers', function (request, response) {

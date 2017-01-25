@@ -81,6 +81,11 @@ module.exports = {
         loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[hash:base64:5]!sass'),
       },
 
+      {
+        exclude: /node_modules/,
+        test: /\.(graphql|mutation)$/,
+        loader: 'graphql-tag/loader',
+      },
     ]
   },
   node: {

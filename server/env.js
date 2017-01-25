@@ -17,7 +17,7 @@ babel({
   env: {
     production: {
       minified: true,
-      plugins: __PRODUCTION__ ? [
+      plugins: [
         // 'transform-react-remove-prop-types',
         // 'transform-react-constant-elements',
         // 'transform-react-inline-elements'

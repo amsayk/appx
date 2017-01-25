@@ -58,8 +58,8 @@ class Confirm extends React.Component {
           </ButtonToolbar>
         </ModalFooter>
       </Modal>
-    )
+    );
   }
 }
 
-export default CSSModules(connectToStores(Confirm), styles, {allowMultiple: true});
+export default connectToStores(CSSModules((Confirm), styles, {allowMultiple: true}));

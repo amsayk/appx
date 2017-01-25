@@ -1,4 +1,4 @@
-import ApolloClient, { addQueryMerging,  addTypename, } from 'apollo-client';
+import ApolloClient, { toIdValue, } from 'apollo-client';
 
 import getCurrentUser from 'utils/getCurrentUser';
 
@@ -35,19 +35,24 @@ responseMiddlewareNetworkInterface.use({
   }
 })
 
-const networkInterface = addQueryMerging(responseMiddlewareNetworkInterface);
+function dataIdFromObject({ id, __typename }) {
+  if (id && __typename) { // eslint-disable-line no-underscore-dangle
+    return __typename + '-' + id; // eslint-disable-line no-underscore-dangle
+  }
+  return null;
+}
 
 export const client = new ApolloClient({
   initialState: window.__APOLLO_STATE__,
   ssrForceFetchDelay: 100,
-  networkInterface,
-  shouldBatch: true,
-  queryTransformer: addTypename,
-  dataIdFromObject: ({ id, __typename }) => {
-    if (id && __typename) { // eslint-disable-line no-underscore-dangle
-      return __typename + '-' +  id; // eslint-disable-line no-underscore-dangle
-    }
-    return null;
-  }
+  networkInterface: responseMiddlewareNetworkInterface,
+  addTypename: true,
+  customResolvers: {
+    Query: {
+      getCompany: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Company', id, })),
+      getForm: (_, { id }) => toIdValue(dataIdFromObject({ __typename: 'Form', id, })),
+    },
+  },
+  dataIdFromObject,
 });
 

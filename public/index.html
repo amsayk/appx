@@ -55,10 +55,10 @@
     // in developer tools for the native `fetch`.
     self.fetch = null;
   </script>
-  <script type='text/javascript'>
+  <script onload="this.parentElement.removeChild(this)" type='text/javascript'>
     window.__APOLLO_STATE__ = <%- apolloState %>;
   </script>
-  <script type='text/javascript'>
+  <script onload="this.parentElement.removeChild(this)" type='text/javascript'>
     window.__APP_STATE__ = <%- appState %>;
   </script>
   <% if (dev) { %>
@@ -66,7 +66,7 @@
   <% } else { %>
   <script src='<%= assets['vendors']['js'] %>'></script>
   <% } %>
-  <script src='<%= assets['main']['js'] %>'></script>
+  <script async defer src='<%= assets['main']['js'] %>'></script>
 
 </body>
 </html>

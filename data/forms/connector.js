@@ -15,14 +15,14 @@ export class FormsConnector {
     });
 
     this.formsLoader = new DataLoader(this.loadForms.bind(this), {
-      cacheKeyFn: ([ id, from, to ]) => [ id, from, to ].join(':')
+      cacheKeyFn: ([ id, from, to ]) => [ id, from, moment(to).format() ].join(':')
     });
 
     this.countsLoader = new DataLoader(this.loadCounts.bind(this), {
     });
 
     this.extrapolationsLoader = new DataLoader(this.loadExtrapolations.bind(this), {
-      cacheKeyFn: ([ id, to ]) => [ id, to ].join(':')
+      cacheKeyFn: ([ id, to ]) => [ id, moment(to).format() ].join(':')
     });
 
     this.allLoader = new DataLoader(this.loadAll.bind(this), {
@@ -62,8 +62,8 @@ export class FormsConnector {
       }
 
       return new Parse.Query(Company).get(id).then(function (company) {
-        const s = process.env.MOCK_DATA === 'true'
-          ?  moment.utc().add(-1 * parseInt(process.env.MOCK_SINCE_DATE), 'years')
+        const s = typeof process.env.MOCK_DATA !== 'undefined'
+          ? moment.utc().add(-1 * parseInt(process.env.MOCK_SINCE_YEARS), 'years')
           : moment.utc(company.get('createdAt'));
         return Promise.all(
           extrapolate(s, to).map(function ({ id, from, to, title }) {

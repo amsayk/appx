@@ -123,7 +123,7 @@ class Company extends React.PureComponent {
   }
   onSubmit(data){
     const self = this;
-    const { id, submit, actions: { refresh }, } = this.props;
+    const { id, doMutationAction : submit, actions: { refresh }, } = this.props;
     return Promise.resolve().then(function () {
       const fields = data.reduce((result, value, key) => {
         switch (key) {
@@ -149,6 +149,7 @@ class Company extends React.PureComponent {
           refresh(company.id);
         }();
         id || function () {
+          const company = result.data.addOrUpdateCompany.company;
           self.context.store.dispatch(
               selectCompany(company.id));
         }();

@@ -1,8 +1,12 @@
 {
   "libs": [
+    "ecma5",
+    "ecma6",
     "browser"
   ],
   "plugins": {
+    "es_modules": {},
     "node": {}
-  }
+  },
+  "ecmaVersion": 6
 }
