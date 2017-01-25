@@ -5,6 +5,8 @@ require('app-module-path').addPath(path.resolve(process.cwd(), 'js'));
 
 const babel = require('babel-register');
 
+const __PRODUCTION__ = process.env.NODE_ENV === 'production';
+
 babel({
   presets: [ 'react-native' ],
   plugins: [
@@ -15,11 +17,11 @@ babel({
   env: {
     production: {
       minified: true,
-      plugins: [
+      plugins: __PRODUCTION__ ? [
         // 'transform-react-remove-prop-types',
         // 'transform-react-constant-elements',
         // 'transform-react-inline-elements'
-      ],
+      ] : [],
     },
   },
 });
@@ -30,7 +32,7 @@ const cssRequireHook = require('css-modules-require-hook');
 
 cssRequireHook({
   extensions: [ '.scss' ],
-  generateScopedName: process.env.NODE_ENV ==='production' ? '[hash:base64:5]' : '[name]__[local]___[hash:base64:5]',
+  generateScopedName: __PRODUCTION__ ? '[hash:base64:5]' : '[name]__[local]___[hash:base64:5]',
   preprocessCss: (data, filename) =>
       sass.renderSync({
         data,

@@ -3,21 +3,28 @@ services:
   app:
     build: .
     ports:
-     - "3000:3001"
+     - "5000:5000"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=5000
       - DATABASE_URI=mongodb://db:27017/appx
       - APPLICATION_ID=appx.appId
       - JAVASCRIPT_KEY=appx.jsKey
       - MASTER_KEY=appx.masterKey
       - CLIENT_CLASS_CREATION=true
       - ANON_USERS=true
-      - SERVER_URL=http://localhost:3000/parse
+      - SERVER_URL=http://compta-formulaires.epsilon.ma/parse
       - SERVER_ASSETS=false
+      - PARSE_MODULE_PATH=parse/node
+      - GRAPHQL_ENDPOINT=http://compta-formulaires.epsilon.ma/graphql
+      - MOCK_DATA=true
+      - MOCK_FORMS=true
+      - MOCK_SINCE_DATE=15
     depends_on:
      - db
   db:
     image: mongo:latest
+    # ports:
+    #   - "27017:27017"
     volumes:
      - /var/lib/appx/data/db:/data/db

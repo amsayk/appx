@@ -1,7 +1,7 @@
-FROM node:latest
-EXPOSE 3000
+FROM node:6
+EXPOSE 5000
 ADD . /app
 WORKDIR /app
 
-RUN cd /app;  npm install
-CMD ["npm", "start"]
+RUN cd /app;
+CMD ["npm", "run", "run"]
